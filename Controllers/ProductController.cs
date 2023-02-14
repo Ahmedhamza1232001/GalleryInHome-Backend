@@ -11,12 +11,16 @@ namespace Proj.Controllers
     [Route("api/[controller]")] //api word here is optional
     public class ProductController : ControllerBase
     {
-        private static Product Table = new Product();
+        private static List<Product> ProductList = new List<Product>()
+        {
+            new Product(),
+            new Product(){Name = "Chair"}   
+        };
         [HttpGet] //when I use it it worked in swagger
         //but I Can make it work by typing the route in the browser
-        public ActionResult<Product> Get()
+        public ActionResult<List<Product>> Get()
         {
-            return Ok(Table);
+            return Ok(ProductList);
         }
 
 
