@@ -27,20 +27,20 @@ namespace Proj.Controllers
         [HttpGet("GetAll")] //when I use it it worked in swagger
         //but I Can make it work by typing the route in the browser
         //[Route("GetAll")]
-        public ActionResult<List<Product>> Get()
+        public async Task<ActionResult<List<Product>>> Get()
         {
-            return Ok(ProductService.GetAllProducts());
+            return Ok( await ProductService.GetAllProducts());
         }
         [HttpGet("{id}")]
-        public ActionResult<Product> GetSingle(int id)
+        public async Task<ActionResult<Product>> GetSingle(int id)
         {
-            return Ok(ProductService.GetProductById(id));
+            return Ok( await ProductService.GetProductById(id));
         }
         [HttpPost]
-        public ActionResult<List<Product>> AddProduct(Product product)
+        public async Task<ActionResult<List<Product>>> AddProduct(Product product)
         {
             
-            return Ok(ProductService.AddProduct(product));
+            return Ok( await ProductService.AddProduct(product));
         }
 
 
