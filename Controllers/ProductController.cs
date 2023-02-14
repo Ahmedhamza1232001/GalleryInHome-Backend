@@ -16,12 +16,19 @@ namespace Proj.Controllers
             new Product(),
             new Product(){Name = "Chair"}   
         };
-        [HttpGet] //when I use it it worked in swagger
+        [HttpGet("GetAll")] //when I use it it worked in swagger
         //but I Can make it work by typing the route in the browser
+        //[Route("GetAll")]
         public ActionResult<List<Product>> Get()
         {
             return Ok(ProductList);
         }
+        [HttpGet]
+        public ActionResult<List<Product>> GetSingle()
+        {
+            return Ok(ProductList[0]);
+        }
+
 
 
     }
