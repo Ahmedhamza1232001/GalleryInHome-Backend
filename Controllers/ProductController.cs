@@ -24,9 +24,15 @@ namespace Proj.Controllers
             return Ok(ProductList);
         }
         [HttpGet("{id}")]
-        public ActionResult<List<Product>> GetSingle(int id)
+        public ActionResult<Product> GetSingle(int id)
         {
             return Ok(ProductList.FirstOrDefault(x=>x.Id == id));
+        }
+        [HttpPost]
+        public ActionResult<List<Product>> AddProduct(Product product)
+        {
+            ProductList.Add(product);
+            return Ok(ProductList);
         }
 
 
