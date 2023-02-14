@@ -1,3 +1,5 @@
+global using Proj.models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
