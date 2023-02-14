@@ -23,10 +23,10 @@ namespace Proj.Controllers
         {
             return Ok(ProductList);
         }
-        [HttpGet]
-        public ActionResult<List<Product>> GetSingle()
+        [HttpGet("{id}")]
+        public ActionResult<List<Product>> GetSingle(int id)
         {
-            return Ok(ProductList[0]);
+            return Ok(ProductList.FirstOrDefault(x=>x.Id == id));
         }
 
 
