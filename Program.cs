@@ -1,4 +1,5 @@
 global using Proj.models;
+using Proj.Services.ProductService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+//to make webApi know which implementaion use for IproductService
+builder.Services.AddScoped<IProductService,ProductService>();
 
 var app = builder.Build();
 
