@@ -7,8 +7,8 @@ namespace Proj.Services.ProductService
 {
     public interface IProductService
     {
-        Task<List<Product>> GetAllProducts();
-        Task<Product> GetProductById(int id);
-        Task<List<Product>> AddProduct(Product newProduct);
+        Task<ServiceResponse<List<Product>>> GetAllProducts();
+        Task<ServiceResponse<Product>> GetProductById(int id);
+        Task<ServiceResponse<List<Product>>> AddProduct(Product newProduct);
     }
 }

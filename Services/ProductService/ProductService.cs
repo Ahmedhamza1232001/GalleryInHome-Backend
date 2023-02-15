@@ -13,20 +13,25 @@ namespace Proj.Services.ProductService
             new Product(){Name = "Chair"}
         };
 
-        public async Task<List<Product>> AddProduct(Product newProduct)
+        public async Task<ServiceResponse<List<Product>>> AddProduct(Product newProduct)
         {
+            var serviceresponse = new ServiceResponse<List<Product>>();
             ProductList.Add(newProduct);
-            return ProductList;
+            serviceresponse.Data = ProductList;
+            return serviceresponse;
         }
 
-        public async Task<List<Product>> GetAllProducts()
+        public async Task<ServiceResponse<List<Product>>> GetAllProducts()
         {
-            return ProductList;
+            return new ServiceResponse<List<Product>>(){Data = ProductList};
         }
 
-        public async Task<Product> GetProductById(int id)
+        public async Task<ServiceResponse<Product>> GetProductById(int id)
         {
-            return ProductList.FirstOrDefault(x => x.Id == id);
+            var serviceresponse = new ServiceResponse<Product>();
+            var product = ProductList.FirstOrDefault(x => x.Id == id);
+            serviceresponse.Data = product;
+            return serviceresponse ;
         }
     }
 }
