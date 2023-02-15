@@ -24,7 +24,9 @@ namespace Proj.Services.ProductService
         public async Task<ServiceResponse<List<GetProductDto>>> AddProduct(AddProductDto newProduct)
         {
             var serviceresponse = new ServiceResponse<List<GetProductDto>>();
-            ProductList.Add(this.Mapper.Map<Product>(newProduct)); //why didn't we use Addproductdto instate of product
+            Product product = this.Mapper.Map<Product>(newProduct);
+            product.Id = ProductList.Max(p => p.Id) + 1;
+            ProductList.Add(product); //why didn't we use Addproductdto instate of product
             serviceresponse.Data = ProductList.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
             return serviceresponse;
         }
