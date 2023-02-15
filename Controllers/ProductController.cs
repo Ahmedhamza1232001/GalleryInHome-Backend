@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Proj.Dtos.Product;
 using Proj.models;   //to use specific folder | you could use global key word in C# 10
 using Proj.Services.ProductService;
 
@@ -27,17 +28,17 @@ namespace Proj.Controllers
         [HttpGet("GetAll")] //when I use it it worked in swagger
         //but I Can make it work by typing the route in the browser
         //[Route("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<Product>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Get()
         {
             return Ok( await ProductService.GetAllProducts());
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<Product>>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<GetProductDto>>> GetSingle(int id)
         {
             return Ok( await ProductService.GetProductById(id));
         }
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<Product>>>> AddProduct(Product product)
+        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> AddProduct(AddProductDto product)
         {
             
             return Ok( await ProductService.AddProduct(product));
