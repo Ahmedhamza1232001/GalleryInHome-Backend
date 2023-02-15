@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Proj.Dtos;
 using Proj.Dtos.Product;
 using Proj.models;   //to use specific folder | you could use global key word in C# 10
 using Proj.Services.ProductService;
 
 namespace Proj.Controllers
 {
-    
+
     [ApiController]
     [Route("api/[controller]")] //api word here is optional
     public class ProductController : ControllerBase
@@ -23,27 +24,36 @@ namespace Proj.Controllers
         private static List<Product> ProductList = new List<Product>()
         {
             new Product(),
-            new Product(){Name = "Chair"}   
+            new Product(){Name = "Chair"}
         };
         [HttpGet("GetAll")] //when I use it it worked in swagger
         //but I Can make it work by typing the route in the browser
         //[Route("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Get()
         {
-            return Ok( await ProductService.GetAllProducts());
+            return Ok(await this.ProductService.GetAllProducts());
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetProductDto>>> GetSingle(int id)
         {
-            return Ok( await ProductService.GetProductById(id));
+            return Ok(await this.ProductService.GetProductById(id));
         }
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> AddProduct(AddProductDto product)
         {
-            
-            return Ok( await ProductService.AddProduct(product));
-        }
 
+            return Ok(await this.ProductService.AddProduct(product));
+        }
+        [HttpPut]
+        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> UpdateProduct(UpdateProductDto updatedProduct)
+        {
+            var response = await this.ProductService.UpdateProduct(updatedProduct);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
 
 
     }

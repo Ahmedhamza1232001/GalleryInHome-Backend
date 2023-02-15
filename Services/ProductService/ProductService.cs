@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Proj.Dtos;
 using Proj.Dtos.Product;
 
 namespace Proj.Services.ProductService
@@ -13,7 +14,7 @@ namespace Proj.Services.ProductService
         public ProductService(IMapper mapper)
         {
             this.Mapper = mapper;
-            
+
         }
         private static List<Product> ProductList = new List<Product>()
         {
@@ -33,15 +34,46 @@ namespace Proj.Services.ProductService
 
         public async Task<ServiceResponse<List<GetProductDto>>> GetAllProducts()
         {
-            return new ServiceResponse<List<GetProductDto>>(){Data = ProductList.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList() };
+            return new ServiceResponse<List<GetProductDto>>() { Data = ProductList.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList() };
         }
 
         public async Task<ServiceResponse<GetProductDto>> GetProductById(int id)
         {
             var serviceresponse = new ServiceResponse<GetProductDto>();
             var product = ProductList.FirstOrDefault(x => x.Id == id);
-            serviceresponse.Data = this.Mapper.Map<GetProductDto> (product);
-            return serviceresponse ;
+            serviceresponse.Data = this.Mapper.Map<GetProductDto>(product);
+            return serviceresponse;
+        }
+
+        public async Task<ServiceResponse<GetProductDto>> UpdateProduct(UpdateProductDto updatedProduct)
+        {
+            ServiceResponse<GetProductDto> response = new ServiceResponse<GetProductDto>();
+
+            try
+            {
+
+                Product product = ProductList.FirstOrDefault(p => p.Id == updatedProduct.Id);
+
+                product.Name = updatedProduct.Name;
+                product.Color = updatedProduct.Color;
+                product.Depth = updatedProduct.Depth;
+                product.Description = updatedProduct.Description;
+                product.Discount = updatedProduct.Discount;
+                product.Height = updatedProduct.Height;
+                product.Width = updatedProduct.Width;
+                product.Price = updatedProduct.Price;
+
+                response.Data = this.Mapper.Map<GetProductDto>(product);
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
+
+
         }
     }
 }
