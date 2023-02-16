@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Proj.Data;
 using Proj.Dtos;
 using Proj.Dtos.Product;
 
@@ -11,37 +13,40 @@ namespace Proj.Services.ProductService
     public class ProductService : IProductService
     {
         public IMapper Mapper { get; }
-        public ProductService(IMapper mapper)
+        public DataContext Context { get; }
+        public ProductService(IMapper mapper , DataContext context)
         {
+            this.Context = context;
             this.Mapper = mapper;
 
         }
-        private static List<Product> ProductList = new List<Product>()
-        {
-            new Product(),
-            new Product(){Name = "Chair"}
-        };
+        
 
         public async Task<ServiceResponse<List<GetProductDto>>> AddProduct(AddProductDto newProduct)
         {
             var serviceresponse = new ServiceResponse<List<GetProductDto>>();
             Product product = this.Mapper.Map<Product>(newProduct);
-            product.Id = ProductList.Max(p => p.Id) + 1;
-            ProductList.Add(product); //why didn't we use Addproductdto instate of product
-            serviceresponse.Data = ProductList.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
+            this.Context.Add(product); //why didn't we use Addproductdto instate of product
+            await this.Context.SaveChangesAsync();
+            serviceresponse.Data = await this.Context.Products
+            .Select(p => this.Mapper.Map<GetProductDto>(p))
+            .ToListAsync();
             return serviceresponse;
         }
 
         public async Task<ServiceResponse<List<GetProductDto>>> GetAllProducts()
         {
-            return new ServiceResponse<List<GetProductDto>>() { Data = ProductList.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList() };
+            var response = new ServiceResponse<List<GetProductDto>>();
+            var dbProducts = await this.Context.Products.ToListAsync();
+            response.Data = dbProducts.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
+            return response;
         }
 
         public async Task<ServiceResponse<GetProductDto>> GetProductById(int id)
         {
             var serviceresponse = new ServiceResponse<GetProductDto>();
-            var product = ProductList.FirstOrDefault(x => x.Id == id);
-            serviceresponse.Data = this.Mapper.Map<GetProductDto>(product);
+            var dbProduct = await this.Context.Products.FirstOrDefaultAsync(x => x.Id == id);
+            serviceresponse.Data = this.Mapper.Map<GetProductDto>(dbProduct);
             return serviceresponse;
         }
 
@@ -52,16 +57,9 @@ namespace Proj.Services.ProductService
             try
             {
 
-                Product product = ProductList.FirstOrDefault(p => p.Id == updatedProduct.Id);
+                var product = await this.Context.Products.FirstOrDefaultAsync(p => p.Id == updatedProduct.Id);
                 this.Mapper.Map(updatedProduct, product);
-                // product.Name = updatedProduct.Name;
-                // product.Color = updatedProduct.Color;
-                // product.Depth = updatedProduct.Depth;
-                // product.Description = updatedProduct.Description;
-                // product.Discount = updatedProduct.Discount;
-                // product.Height = updatedProduct.Height;
-                // product.Width = updatedProduct.Width;
-                // product.Price = updatedProduct.Price;
+                await this.Context.SaveChangesAsync();
 
                 response.Data = this.Mapper.Map<GetProductDto>(product);
             }
@@ -83,9 +81,10 @@ namespace Proj.Services.ProductService
             try
             {
 
-                Product product = ProductList.First(p => p.Id == id);
-                ProductList.Remove(product);
-                response.Data = ProductList.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
+                Product product =await this.Context.Products.FirstAsync(p => p.Id == id);
+                this.Context.Products.Remove(product);
+                await this.Context.SaveChangesAsync();
+                response.Data = this.Context.Products.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
 
             }
             catch (Exception ex)
