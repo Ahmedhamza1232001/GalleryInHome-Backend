@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Proj.Dtos;
 using Proj.Dtos.Product;
 
 namespace Proj
@@ -13,6 +14,8 @@ namespace Proj
         {
             CreateMap<Product, GetProductDto>();
             CreateMap<AddProductDto, Product>();
+            CreateMap<UpdateProductDto, Product>();
+
         }
     }
 }

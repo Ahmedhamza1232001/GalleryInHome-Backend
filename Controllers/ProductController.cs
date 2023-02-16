@@ -37,13 +37,22 @@ namespace Proj.Controllers
         public async Task<ActionResult<ServiceResponse<GetProductDto>>> GetSingle(int id)
         {
             return Ok(await this.ProductService.GetProductById(id));
+        }[HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Delete(int id)
+        {
+            var response = await this.ProductService.DeleteProduct(id);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> AddProduct(AddProductDto product)
         {
 
             return Ok(await this.ProductService.AddProduct(product));
-        }
+        }   
         [HttpPut]
         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> UpdateProduct(UpdateProductDto updatedProduct)
         {

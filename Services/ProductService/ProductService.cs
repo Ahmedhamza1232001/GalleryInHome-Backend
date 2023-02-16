@@ -53,15 +53,15 @@ namespace Proj.Services.ProductService
             {
 
                 Product product = ProductList.FirstOrDefault(p => p.Id == updatedProduct.Id);
-
-                product.Name = updatedProduct.Name;
-                product.Color = updatedProduct.Color;
-                product.Depth = updatedProduct.Depth;
-                product.Description = updatedProduct.Description;
-                product.Discount = updatedProduct.Discount;
-                product.Height = updatedProduct.Height;
-                product.Width = updatedProduct.Width;
-                product.Price = updatedProduct.Price;
+                this.Mapper.Map(updatedProduct, product);
+                // product.Name = updatedProduct.Name;
+                // product.Color = updatedProduct.Color;
+                // product.Depth = updatedProduct.Depth;
+                // product.Description = updatedProduct.Description;
+                // product.Discount = updatedProduct.Discount;
+                // product.Height = updatedProduct.Height;
+                // product.Width = updatedProduct.Width;
+                // product.Price = updatedProduct.Price;
 
                 response.Data = this.Mapper.Map<GetProductDto>(product);
             }
@@ -73,6 +73,28 @@ namespace Proj.Services.ProductService
 
             return response;
 
+
+        }
+
+        public async Task<ServiceResponse<List<GetProductDto>>> DeleteProduct(int id)
+        {
+            ServiceResponse<List<GetProductDto>> response = new ServiceResponse<List<GetProductDto>>();
+
+            try
+            {
+
+                Product product = ProductList.First(p => p.Id == id);
+                ProductList.Remove(product);
+                response.Data = ProductList.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
 
         }
     }
