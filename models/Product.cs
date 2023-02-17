@@ -23,6 +23,7 @@ namespace Proj.models
         public int Warranty { get; set; }
         //public List<Material> Materials { get; set; }
         public bool IsFavo { get; set; }
+        public User? User { get; set; }
 
     }
 }
