@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Proj.Data
 {
@@ -21,13 +22,20 @@ namespace Proj.Data
         public async Task<ServiceResponse<int>> Register(User user, string password)
         {
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+            ServiceResponse<int> response = new ServiceResponse<int>();
+            if (await UserExist(user.UserName))
+            {
+                response.Success = false;
+                response.Message = "User aleready exists.";
+                return response;
+            }
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
             this.Context.Users.Add(user);
             await this.Context.SaveChangesAsync();
-            ServiceResponse<int> response = new ServiceResponse<int>();
+
             response.Data = user.Id;
             return response;
         }
@@ -41,9 +49,13 @@ namespace Proj.Data
             }
         }
 
-        public Task<bool> UserExist(string username)
+        public async Task<bool> UserExist(string username)
         {
-            throw new NotImplementedException();
+            if (await this.Context.Users.AnyAsync(u => u.UserName.ToLower() == username.ToLower()))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
