@@ -7,6 +7,7 @@ namespace Proj.models
 {
     public class User
     {
+        //one to many relationship
         public int Id { get; set; }
         public string UserName { get; set; } = string.Empty;
         public byte[] PasswordHash { get; set; }

@@ -24,6 +24,7 @@ namespace Proj.models
         //public List<Material> Materials { get; set; }
         public bool IsFavo { get; set; }
         public User? User { get; set; }
+        public Factory Factory { get; set; }
 
     }
 }
