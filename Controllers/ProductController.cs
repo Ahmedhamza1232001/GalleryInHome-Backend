@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Proj.Dtos;
 using Proj.Dtos.Product;
@@ -10,7 +11,7 @@ using Proj.Services.ProductService;
 
 namespace Proj.Controllers
 {
-
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")] //api word here is optional
     public class ProductController : ControllerBase
