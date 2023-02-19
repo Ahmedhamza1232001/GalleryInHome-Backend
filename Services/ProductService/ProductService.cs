@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,31 +15,38 @@ namespace Proj.Services.ProductService
     {
         public IMapper Mapper { get; }
         public DataContext Context { get; }
-        public ProductService(IMapper mapper , DataContext context)
+        public IHttpContextAccessor HttpContextAccessor { get; }
+        public ProductService(IMapper mapper , DataContext context, IHttpContextAccessor httpContextAccessor )
         {
+            this.HttpContextAccessor = httpContextAccessor;
             this.Context = context;
             this.Mapper = mapper;
 
         }
-        
+
+        private int GetUserId() => int.Parse(this.HttpContextAccessor.HttpContext.User
+        .FindFirstValue(ClaimTypes.NameIdentifier));
+
 
         public async Task<ServiceResponse<List<GetProductDto>>> AddProduct(AddProductDto newProduct)
         {
             var serviceresponse = new ServiceResponse<List<GetProductDto>>();
             Product product = this.Mapper.Map<Product>(newProduct);
+            product.User = await this.Context.Users.FirstOrDefaultAsync(p => p.Id == GetUserId());
             this.Context.Add(product); //why didn't we use Addproductdto instate of product
             await this.Context.SaveChangesAsync();
             serviceresponse.Data = await this.Context.Products
+            .Where(p=> p.User.Id == GetUserId())
             .Select(p => this.Mapper.Map<GetProductDto>(p))
             .ToListAsync();
             return serviceresponse;
         }
 
-        public async Task<ServiceResponse<List<GetProductDto>>> GetAllProducts(int userId )
+        public async Task<ServiceResponse<List<GetProductDto>>> GetAllProducts()
         {
             var response = new ServiceResponse<List<GetProductDto>>();
             var dbProducts = await this.Context.Products
-            .Where(p => p.User.Id == userId)
+            .Where(p => p.User.Id == GetUserId())
             .ToListAsync();
             response.Data = dbProducts.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
             return response;

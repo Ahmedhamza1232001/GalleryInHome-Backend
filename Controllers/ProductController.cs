@@ -34,8 +34,8 @@ namespace Proj.Controllers
         //[Route("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Get()
         {
-            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            return Ok(await this.ProductService.GetAllProducts(userId));
+            
+            return Ok(await this.ProductService.GetAllProducts());
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetProductDto>>> GetSingle(int id)
