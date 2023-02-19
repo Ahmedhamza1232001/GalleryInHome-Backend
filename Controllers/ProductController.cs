@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,8 @@ namespace Proj.Controllers
         //[Route("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Get()
         {
-            return Ok(await this.ProductService.GetAllProducts());
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            return Ok(await this.ProductService.GetAllProducts(userId));
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetProductDto>>> GetSingle(int id)

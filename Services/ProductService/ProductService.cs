@@ -34,10 +34,12 @@ namespace Proj.Services.ProductService
             return serviceresponse;
         }
 
-        public async Task<ServiceResponse<List<GetProductDto>>> GetAllProducts()
+        public async Task<ServiceResponse<List<GetProductDto>>> GetAllProducts(int userId )
         {
             var response = new ServiceResponse<List<GetProductDto>>();
-            var dbProducts = await this.Context.Products.ToListAsync();
+            var dbProducts = await this.Context.Products
+            .Where(p => p.User.Id == userId)
+            .ToListAsync();
             response.Data = dbProducts.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
             return response;
         }
