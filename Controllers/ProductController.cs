@@ -27,6 +27,7 @@ namespace Proj.Controllers
             new Product(),
             new Product(){Name = "Chair"}
         };
+        //[AllowAnonymous]
         [HttpGet("GetAll")] //when I use it it worked in swagger
         //but I Can make it work by typing the route in the browser
         //[Route("GetAll")]
