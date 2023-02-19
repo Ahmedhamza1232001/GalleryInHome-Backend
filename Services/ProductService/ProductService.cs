@@ -16,7 +16,7 @@ namespace Proj.Services.ProductService
         public IMapper Mapper { get; }
         public DataContext Context { get; }
         public IHttpContextAccessor HttpContextAccessor { get; }
-        public ProductService(IMapper mapper , DataContext context, IHttpContextAccessor httpContextAccessor )
+        public ProductService(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
         {
             this.HttpContextAccessor = httpContextAccessor;
             this.Context = context;
@@ -36,7 +36,7 @@ namespace Proj.Services.ProductService
             this.Context.Add(product); //why didn't we use Addproductdto instate of product
             await this.Context.SaveChangesAsync();
             serviceresponse.Data = await this.Context.Products
-            .Where(p=> p.User.Id == GetUserId())
+            .Where(p => p.User.Id == GetUserId())
             .Select(p => this.Mapper.Map<GetProductDto>(p))
             .ToListAsync();
             return serviceresponse;
@@ -55,7 +55,8 @@ namespace Proj.Services.ProductService
         public async Task<ServiceResponse<GetProductDto>> GetProductById(int id)
         {
             var serviceresponse = new ServiceResponse<GetProductDto>();
-            var dbProduct = await this.Context.Products.FirstOrDefaultAsync(x => x.Id == id);
+            var dbProduct = await this.Context.Products
+            .FirstOrDefaultAsync(p => p.Id == id && p.User.Id == GetUserId());
             serviceresponse.Data = this.Mapper.Map<GetProductDto>(dbProduct);
             return serviceresponse;
         }
@@ -67,11 +68,23 @@ namespace Proj.Services.ProductService
             try
             {
 
-                var product = await this.Context.Products.FirstOrDefaultAsync(p => p.Id == updatedProduct.Id);
-                this.Mapper.Map(updatedProduct, product);
-                await this.Context.SaveChangesAsync();
+                var product = await this.Context.Products
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.Id == updatedProduct.Id);
+                if (product.User.Id == GetUserId())
+                {
+                    this.Mapper.Map(updatedProduct, product);
+                    await this.Context.SaveChangesAsync();
 
-                response.Data = this.Mapper.Map<GetProductDto>(product);
+                    response.Data = this.Mapper.Map<GetProductDto>(product);
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "Product Not found";
+
+                }
+
             }
             catch (Exception ex)
             {
@@ -91,10 +104,23 @@ namespace Proj.Services.ProductService
             try
             {
 
-                Product product =await this.Context.Products.FirstAsync(p => p.Id == id);
-                this.Context.Products.Remove(product);
-                await this.Context.SaveChangesAsync();
-                response.Data = this.Context.Products.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
+                Product product = await this.Context.Products
+                .FirstOrDefaultAsync(p => p.Id == id && p.User.Id == GetUserId());
+                if (product != null)
+                {
+                    this.Context.Products.Remove(product);
+                    await this.Context.SaveChangesAsync();
+                    response.Data = this.Context.Products
+                    .Where(p => p.User.Id == GetUserId())
+                    .Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "Character Not Found";
+                }
+
+
 
             }
             catch (Exception ex)
