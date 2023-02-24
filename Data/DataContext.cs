@@ -15,6 +15,7 @@ namespace Proj.Data
         public DbSet<Product> Products => Set<Product>();
         public DbSet<User> Users => Set<User>();
         public DbSet<Factory> Factories => Set<Factory>();
+        public DbSet<Material> Materials => Set<Material>();
 
     }
 }

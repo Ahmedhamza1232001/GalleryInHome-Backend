@@ -21,7 +21,7 @@ namespace Proj.models
         public int Depth { get; set; }
         public string MadeIn { get; set; } = string.Empty;
         public int Warranty { get; set; }
-        //public List<Material> Materials { get; set; }
+        public List<Material> Materials { get; set; }
         public bool IsFavo { get; set; }
         public User? User { get; set; }
         public Factory Factory { get; set; }
