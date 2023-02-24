@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Proj.Dtos.Factory;
 
 namespace Proj.Dtos.Product
 {
@@ -22,5 +23,6 @@ namespace Proj.Dtos.Product
         public int Warranty { get; set; }
         //public List<Material> Materials { get; set; }
         public bool IsFavo { get; set; }
+        public GetFactoryDto Factory { get; set; }
     }
 }

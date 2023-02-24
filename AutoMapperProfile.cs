@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Proj.Dtos;
 using Proj.Dtos.Product;
+using Proj.Dtos.Factory;
 
 namespace Proj
 {
@@ -15,6 +16,7 @@ namespace Proj
             CreateMap<Product, GetProductDto>();
             CreateMap<AddProductDto, Product>();
             CreateMap<UpdateProductDto, Product>();
+            CreateMap<Factory, GetFactoryDto>();
 
         }
     }

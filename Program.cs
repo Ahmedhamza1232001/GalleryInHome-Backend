@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Proj.Data;
+using Proj.Services.FactoryService;
 using Proj.Services.ProductService;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -57,6 +58,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IFactoryService, FactoryService>();
 
 var app = builder.Build();
 
