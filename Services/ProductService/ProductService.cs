@@ -47,6 +47,8 @@ namespace Proj.Services.ProductService
             var response = new ServiceResponse<List<GetProductDto>>();
             var dbProducts = await this.Context.Products
             .Where(p => p.User.Id == GetUserId())
+            .Include(p => p.Factory)
+            .Include(p => p.Materials)
             .ToListAsync();
             response.Data = dbProducts.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
             return response;
@@ -56,6 +58,8 @@ namespace Proj.Services.ProductService
         {
             var serviceresponse = new ServiceResponse<GetProductDto>();
             var dbProduct = await this.Context.Products
+            .Include(p => p.Factory)
+            .Include(p => p.Materials)
             .FirstOrDefaultAsync(p => p.Id == id && p.User.Id == GetUserId());
             serviceresponse.Data = this.Mapper.Map<GetProductDto>(dbProduct);
             return serviceresponse;
@@ -131,6 +135,43 @@ namespace Proj.Services.ProductService
 
             return response;
 
+        }
+
+        public async Task<ServiceResponse<GetProductDto>> AddProductMaterial(AddProductMaterialDto newProductMaterial)
+        {
+            var response = new ServiceResponse<GetProductDto>();
+            try
+            {
+                var product = await this.Context.Products
+                .Include(p => p.Factory)
+                .Include(p => p.Materials)
+                .FirstOrDefaultAsync(p => p.Id == newProductMaterial.ProductId &&
+                p.User.Id == GetUserId());
+
+
+                if (product == null)
+                {
+                    response.Success = false;
+                    response.Message = "Product not found.";
+                    return response;
+                }
+                var material = await this.Context.Materials.FirstOrDefaultAsync(m => m.Id == newProductMaterial.MaterialId);
+                if (material is null)
+                {
+                    response.Success = false;
+                    response.Message = "Skill not found.";
+                    return response;
+                }
+                product.Materials.Add(material);
+                await this.Context.SaveChangesAsync();
+                response.Data = this.Mapper.Map<GetProductDto>(product);
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
     }
 }

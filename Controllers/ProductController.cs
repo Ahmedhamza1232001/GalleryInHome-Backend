@@ -34,14 +34,15 @@ namespace Proj.Controllers
         //[Route("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Get()
         {
-            
+
             return Ok(await this.ProductService.GetAllProducts());
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetProductDto>>> GetSingle(int id)
         {
             return Ok(await this.ProductService.GetProductById(id));
-        }[HttpDelete("{id}")]
+        }
+        [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Delete(int id)
         {
             var response = await this.ProductService.DeleteProduct(id);
@@ -56,7 +57,7 @@ namespace Proj.Controllers
         {
 
             return Ok(await this.ProductService.AddProduct(product));
-        }   
+        }
         [HttpPut]
         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> UpdateProduct(UpdateProductDto updatedProduct)
         {
@@ -66,6 +67,12 @@ namespace Proj.Controllers
                 return NotFound(response);
             }
             return Ok(response);
+        }
+
+        [HttpPost("Material")]
+        public async Task<ActionResult<ServiceResponse<GetProductDto>>> AddProductMaterial(AddProductMaterialDto newProductMaterial)
+        {
+            return Ok(await this.ProductService.AddProductMaterial(newProductMaterial));
         }
 
 

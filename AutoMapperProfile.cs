@@ -6,6 +6,7 @@ using AutoMapper;
 using Proj.Dtos;
 using Proj.Dtos.Product;
 using Proj.Dtos.Factory;
+using Proj.Dtos.Material;
 
 namespace Proj
 {
@@ -17,6 +18,7 @@ namespace Proj
             CreateMap<AddProductDto, Product>();
             CreateMap<UpdateProductDto, Product>();
             CreateMap<Factory, GetFactoryDto>();
+            CreateMap<Material, GetMaterialDto>();
 
         }
     }

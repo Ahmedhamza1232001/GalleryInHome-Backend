@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Proj.Dtos.Factory;
+using Proj.Dtos.Material;
 
 namespace Proj.Dtos.Product
 {
@@ -24,5 +25,6 @@ namespace Proj.Dtos.Product
         //public List<Material> Materials { get; set; }
         public bool IsFavo { get; set; }
         public GetFactoryDto Factory { get; set; }
+        public List<GetMaterialDto> Materials { get; set; }
     }
 }

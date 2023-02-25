@@ -14,5 +14,6 @@ namespace Proj.Services.ProductService
         Task<ServiceResponse<List<GetProductDto>>> AddProduct(AddProductDto newProduct);
         Task<ServiceResponse<GetProductDto>> UpdateProduct(UpdateProductDto updatedProduct);
         Task<ServiceResponse<List<GetProductDto>>> DeleteProduct(int id);
+        Task<ServiceResponse<GetProductDto>> AddProductMaterial(AddProductMaterialDto newProductSkill);
     }
 }
