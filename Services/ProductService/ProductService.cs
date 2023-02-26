@@ -49,6 +49,18 @@ namespace Proj.Services.ProductService
             .Where(p => p.User.Id == GetUserId())
             .Include(p => p.Factory)
             .Include(p => p.Materials)
+            .Include(p =>p.Images)
+            .ToListAsync();
+            response.Data = dbProducts.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
+            return response;
+        }
+        public async Task<ServiceResponse<List<GetProductDto>>> GetAllUnAuth()
+        {
+            var response = new ServiceResponse<List<GetProductDto>>();
+            var dbProducts = await this.Context.Products
+            .Include(p => p.Factory)
+            .Include(p => p.Materials)
+            .Include(p => p.Images)
             .ToListAsync();
             response.Data = dbProducts.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
             return response;
