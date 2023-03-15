@@ -32,14 +32,14 @@ builder.Services.AddSwaggerGen(c =>
 var provider = builder.Services.BuildServiceProvider();
 var configuration = provider.GetRequiredService<IConfiguration>();
 
-builder.Services.AddCors(options =>
-{
-    var frontendURL = configuration.GetValue<string>("frontend_url");
-    options.AddDefaultPolicy(builder =>
-    {
-        builder.WithOrigins(frontendURL).AllowAnyMethod().AllowAnyHeader();
-    });
-});
+// builder.Services.AddCors(options =>
+// {
+//     var frontendURL = configuration.GetValue<string>("frontend_url");
+//     options.AddDefaultPolicy(builder =>
+//     {
+//         builder.WithOrigins(frontendURL).AllowAnyMethod().AllowAnyHeader();
+//     });
+// });
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 //to make webApi know which implementaion use for IproductService
