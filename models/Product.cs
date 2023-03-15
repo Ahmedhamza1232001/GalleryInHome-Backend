@@ -1,3 +1,4 @@
+using System.Runtime.ConstrainedExecution;
 using System.Drawing;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,6 @@ namespace Proj.models
         public double Price { get; set; }
         public int  Discount { get; set; }
         public ColorClass Color { get; set; } = ColorClass.White;
-        //public List<Category> Categories { get; set; }
         public List<Image> Images { get; set; }
         public int Height { get; set; }   
         public int Width { get; set; }
@@ -25,6 +25,10 @@ namespace Proj.models
         public bool IsFavo { get; set; }
         public User? User { get; set; }
         public Factory Factory { get; set; }
+        public bool InStock { get; set; } = true;
+        public string Model { get; set; } = string.Empty;
+        public string Review { get; set; } = string.Empty;
+
 
     }
 }
