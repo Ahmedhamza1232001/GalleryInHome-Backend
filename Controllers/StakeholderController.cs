@@ -15,10 +15,10 @@ namespace Proj.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")] //api word here is optional
-    public class ProductController : ControllerBase
+    public class StakeholderController : ControllerBase
     {
         public IProductService ProductService { get; }
-        public ProductController(IProductService productService)
+        public StakeholderController(IProductService productService)
         {
             this.ProductService = productService;
 
