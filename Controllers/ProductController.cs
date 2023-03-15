@@ -23,28 +23,14 @@ namespace Proj.Controllers
             this.ProductService = productService;
 
         }
-        private static List<Product> ProductList = new List<Product>()
-        {
-            new Product(),
-            new Product(){Name = "Chair"}
-        };
-        //[AllowAnonymous]
-        [HttpGet("GetAll")] //when I use it it worked in swagger
-        //but I Can make it work by typing the route in the browser
-        //[Route("GetAll")]
+       
+        
+        [HttpGet("GetAll")] 
         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Get()
         {
-
             return Ok(await this.ProductService.GetAllProducts());
         }
-        [AllowAnonymous]
-        [HttpGet("GetAllProducts")] 
         
-        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> GetAll()
-        {
-
-            return Ok(await this.ProductService.GetAllUnAuth());
-        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetProductDto>>> GetSingle(int id)
@@ -64,7 +50,6 @@ namespace Proj.Controllers
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> AddProduct(AddProductDto product)
         {
-
             return Ok(await this.ProductService.AddProduct(product));
         }
         [HttpPut]
