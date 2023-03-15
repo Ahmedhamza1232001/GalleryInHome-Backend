@@ -22,7 +22,15 @@ namespace Proj.Controllers
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
         {
             var response = await this.authRepo.Register(
-                new User { UserName = request.UserName }, request.Password
+                new User 
+                { 
+                    UserName = request.UserName,
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    Age = request.Age,
+                    Email = request.Email
+                }, 
+                request.Password
             );
             if(!response.Success){
                 return BadRequest(response);
