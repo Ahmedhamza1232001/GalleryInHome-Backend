@@ -26,19 +26,19 @@ namespace Proj.Controllers
        
         
         [HttpGet("GetAll")] 
-        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> Get()
         {
             return Ok(await this.ProductService.GetAllProducts());
         }
         
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<GetProductDto>>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<StakeholderGetProductDto>>> GetSingle(int id)
         {
             return Ok(await this.ProductService.GetProductById(id));
         }
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Delete(int id)
+        public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> Delete(int id)
         {
             var response = await this.ProductService.DeleteProduct(id);
             if (response.Data == null)
@@ -48,12 +48,12 @@ namespace Proj.Controllers
             return Ok(response);
         }
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> AddProduct(AddProductDto product)
+        public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> AddProduct(StakeholderAddProductDto product)
         {
             return Ok(await this.ProductService.AddProduct(product));
         }
         [HttpPut]
-        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> UpdateProduct(UpdateProductDto updatedProduct)
+        public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> UpdateProduct(StakeholderUpdateProductDto updatedProduct)
         {
             var response = await this.ProductService.UpdateProduct(updatedProduct);
             if (response.Data == null)
@@ -64,7 +64,7 @@ namespace Proj.Controllers
         }
 
         [HttpPost("Material")]
-        public async Task<ActionResult<ServiceResponse<GetProductDto>>> AddProductMaterial(AddProductMaterialDto newProductMaterial)
+        public async Task<ActionResult<ServiceResponse<StakeholderGetProductDto>>> AddProductMaterial(StakeholderAddProductMaterialDto newProductMaterial)
         {
             return Ok(await this.ProductService.AddProductMaterial(newProductMaterial));
         }

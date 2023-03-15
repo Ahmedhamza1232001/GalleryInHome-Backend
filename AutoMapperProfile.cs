@@ -14,9 +14,9 @@ namespace Proj
     {
         public AutoMapperProfile()
         {
-            CreateMap<Product, GetProductDto>();
-            CreateMap<AddProductDto, Product>();
-            CreateMap<UpdateProductDto, Product>();
+            CreateMap<Product, StakeholderGetProductDto>();
+            CreateMap<StakeholderAddProductDto, Product>();
+            CreateMap<StakeholderUpdateProductDto, Product>();
             CreateMap<Factory, GetFactoryDto>();
             CreateMap<Material, GetMaterialDto>();
 

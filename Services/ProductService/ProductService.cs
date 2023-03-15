@@ -28,58 +28,58 @@ namespace Proj.Services.ProductService
         .FindFirstValue(ClaimTypes.NameIdentifier));
 
 
-        public async Task<ServiceResponse<List<GetProductDto>>> AddProduct(AddProductDto newProduct)
+        public async Task<ServiceResponse<List<StakeholderGetProductDto>>> AddProduct(StakeholderAddProductDto newProduct)
         {
-            var serviceresponse = new ServiceResponse<List<GetProductDto>>();
+            var serviceresponse = new ServiceResponse<List<StakeholderGetProductDto>>();
             Product product = this.Mapper.Map<Product>(newProduct);
             product.User = await this.Context.Users.FirstOrDefaultAsync(p => p.Id == GetUserId());
             this.Context.Add(product); //why didn't we use Addproductdto instate of product
             await this.Context.SaveChangesAsync();
             serviceresponse.Data = await this.Context.Products
             .Where(p => p.User.Id == GetUserId())
-            .Select(p => this.Mapper.Map<GetProductDto>(p))
+            .Select(p => this.Mapper.Map<StakeholderGetProductDto>(p))
             .ToListAsync();
             return serviceresponse;
         }
 
-        public async Task<ServiceResponse<List<GetProductDto>>> GetAllProducts()
+        public async Task<ServiceResponse<List<StakeholderGetProductDto>>> GetAllProducts()
         {
-            var response = new ServiceResponse<List<GetProductDto>>();
+            var response = new ServiceResponse<List<StakeholderGetProductDto>>();
             var dbProducts = await this.Context.Products
             .Where(p => p.User.Id == GetUserId())
             .Include(p => p.Factory)
             .Include(p => p.Materials)
             .Include(p =>p.Images)
             .ToListAsync();
-            response.Data = dbProducts.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
+            response.Data = dbProducts.Select(p => this.Mapper.Map<StakeholderGetProductDto>(p)).ToList();
             return response;
         }
-        public async Task<ServiceResponse<List<GetProductDto>>> GetAllUnAuth()
+        public async Task<ServiceResponse<List<StakeholderGetProductDto>>> GetAllUnAuth()
         {
-            var response = new ServiceResponse<List<GetProductDto>>();
+            var response = new ServiceResponse<List<StakeholderGetProductDto>>();
             var dbProducts = await this.Context.Products
             .Include(p => p.Factory)
             .Include(p => p.Materials)
             .Include(p => p.Images)
             .ToListAsync();
-            response.Data = dbProducts.Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
+            response.Data = dbProducts.Select(p => this.Mapper.Map<StakeholderGetProductDto>(p)).ToList();
             return response;
         }
 
-        public async Task<ServiceResponse<GetProductDto>> GetProductById(int id)
+        public async Task<ServiceResponse<StakeholderGetProductDto>> GetProductById(int id)
         {
-            var serviceresponse = new ServiceResponse<GetProductDto>();
+            var serviceresponse = new ServiceResponse<StakeholderGetProductDto>();
             var dbProduct = await this.Context.Products
             .Include(p => p.Factory)
             .Include(p => p.Materials)
             .FirstOrDefaultAsync(p => p.Id == id && p.User.Id == GetUserId());
-            serviceresponse.Data = this.Mapper.Map<GetProductDto>(dbProduct);
+            serviceresponse.Data = this.Mapper.Map<StakeholderGetProductDto>(dbProduct);
             return serviceresponse;
         }
 
-        public async Task<ServiceResponse<GetProductDto>> UpdateProduct(UpdateProductDto updatedProduct)
+        public async Task<ServiceResponse<StakeholderGetProductDto>> UpdateProduct(StakeholderUpdateProductDto updatedProduct)
         {
-            ServiceResponse<GetProductDto> response = new ServiceResponse<GetProductDto>();
+            ServiceResponse<StakeholderGetProductDto> response = new ServiceResponse<StakeholderGetProductDto>();
 
             try
             {
@@ -92,7 +92,7 @@ namespace Proj.Services.ProductService
                     this.Mapper.Map(updatedProduct, product);
                     await this.Context.SaveChangesAsync();
 
-                    response.Data = this.Mapper.Map<GetProductDto>(product);
+                    response.Data = this.Mapper.Map<StakeholderGetProductDto>(product);
                 }
                 else
                 {
@@ -113,9 +113,9 @@ namespace Proj.Services.ProductService
 
         }
 
-        public async Task<ServiceResponse<List<GetProductDto>>> DeleteProduct(int id)
+        public async Task<ServiceResponse<List<StakeholderGetProductDto>>> DeleteProduct(int id)
         {
-            ServiceResponse<List<GetProductDto>> response = new ServiceResponse<List<GetProductDto>>();
+            ServiceResponse<List<StakeholderGetProductDto>> response = new ServiceResponse<List<StakeholderGetProductDto>>();
 
             try
             {
@@ -128,7 +128,7 @@ namespace Proj.Services.ProductService
                     await this.Context.SaveChangesAsync();
                     response.Data = this.Context.Products
                     .Where(p => p.User.Id == GetUserId())
-                    .Select(p => this.Mapper.Map<GetProductDto>(p)).ToList();
+                    .Select(p => this.Mapper.Map<StakeholderGetProductDto>(p)).ToList();
                 }
                 else
                 {
@@ -149,9 +149,9 @@ namespace Proj.Services.ProductService
 
         }
 
-        public async Task<ServiceResponse<GetProductDto>> AddProductMaterial(AddProductMaterialDto newProductMaterial)
+        public async Task<ServiceResponse<StakeholderGetProductDto>> AddProductMaterial(StakeholderAddProductMaterialDto newProductMaterial)
         {
-            var response = new ServiceResponse<GetProductDto>();
+            var response = new ServiceResponse<StakeholderGetProductDto>();
             try
             {
                 var product = await this.Context.Products
@@ -176,7 +176,7 @@ namespace Proj.Services.ProductService
                 }
                 product.Materials.Add(material);
                 await this.Context.SaveChangesAsync();
-                response.Data = this.Mapper.Map<GetProductDto>(product);
+                response.Data = this.Mapper.Map<StakeholderGetProductDto>(product);
             }
             catch (Exception ex)
             {

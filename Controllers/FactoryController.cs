@@ -24,7 +24,7 @@ namespace Proj.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<GetProductDto>>> AddFactory(AddFactoryDto newFactory)
+        public async Task<ActionResult<ServiceResponse<StakeholderGetProductDto>>> AddFactory(AddFactoryDto newFactory)
         {
             return Ok(await this.factoryService.AddFactory(newFactory));
         }

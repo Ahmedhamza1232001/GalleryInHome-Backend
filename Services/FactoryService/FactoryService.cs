@@ -23,9 +23,9 @@ namespace Proj.Services.FactoryService
             this.httpContextAccessor = httpContextAccessor;
             this.mapper = mapper;
         }
-        public async Task<ServiceResponse<GetProductDto>> AddFactory(AddFactoryDto newFactory)
+        public async Task<ServiceResponse<StakeholderGetProductDto>> AddFactory(AddFactoryDto newFactory)
         {
-            ServiceResponse<GetProductDto> response = new ServiceResponse<GetProductDto>();
+            ServiceResponse<StakeholderGetProductDto> response = new ServiceResponse<StakeholderGetProductDto>();
             try
             {
                 Product product = await this.context.Products
@@ -47,7 +47,7 @@ namespace Proj.Services.FactoryService
 
             this.context.Factories.Add(factory);
                 await this.context.SaveChangesAsync();
-                response.Data = this.mapper.Map<GetProductDto>(product);
+                response.Data = this.mapper.Map<StakeholderGetProductDto>(product);
             }
             catch (Exception ex)
             {

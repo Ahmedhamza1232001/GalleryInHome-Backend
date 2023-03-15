@@ -9,6 +9,6 @@ namespace Proj.Services.FactoryService
 {
     public interface IFactoryService
     {
-        Task<ServiceResponse<GetProductDto>> AddFactory(AddFactoryDto newFactory);
+        Task<ServiceResponse<StakeholderGetProductDto>> AddFactory(AddFactoryDto newFactory);
     }
 }
