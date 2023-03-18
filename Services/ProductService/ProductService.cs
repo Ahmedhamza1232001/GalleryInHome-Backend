@@ -52,6 +52,7 @@ namespace Proj.Services.ProductService
             .Include(p => p.Materials)
             .Include(p =>p.Images)
             .ToListAsync();
+            //why we use mapping here 
             response.Data = dbProducts.Select(p => this.Mapper.Map<StakeholderGetProductDto>(p)).ToList();
             return response;
         }
