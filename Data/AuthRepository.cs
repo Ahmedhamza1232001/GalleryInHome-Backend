@@ -19,9 +19,9 @@ namespace Proj.Data
             this.Context = context;
 
         }
-        public async Task<ServiceResponse<string>> Login(string username, string password)
+        public async Task<ServiceResponse<object>> Login(string username, string password)
         {
-            var response = new ServiceResponse<string>();
+            var response = new ServiceResponse<object>();
             var user = await this.Context.Users
             .FirstOrDefaultAsync(u => u.UserName.ToLower().Equals(username.ToLower()));
 
@@ -37,7 +37,8 @@ namespace Proj.Data
             }
             else
             {
-                response.Data = CreateToken(user);
+                response.Data = new List<object>(){CreateToken(user),user};
+                
             }
             return response;
 
