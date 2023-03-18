@@ -14,8 +14,8 @@ namespace Proj.models
         public string LastName { get; set; } = string.Empty;
         public int Age { get; set; }
         public string Email { get; set; } = string.Empty;
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
+        public byte[] PasswordHash { get; set; } = new byte[] { }; //I'll change this and make exception
+        public byte[] PasswordSalt { get; set; } = new byte[] { };
 
 
         //Relationships
