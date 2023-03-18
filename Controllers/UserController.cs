@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Proj.Dtos.Product;
 using Proj.Services.ProductService;
 using Microsoft.AspNetCore.Authorization;
+using Proj.Services.UserService;
 
 namespace Proj.Controllers
 {
@@ -15,16 +16,6 @@ namespace Proj.Controllers
     [Authorize]
     public class UserController:ControllerBase
     {
-        private readonly IProductService ProductService;
-        public UserController(IProductService productService)
-        {
-            this.ProductService = productService;
-        }
-
-        [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> Get()
-        {
-            return Ok(await this.ProductService.GetAllProducts());
-        }
+        
     }
 }
