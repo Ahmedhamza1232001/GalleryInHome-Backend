@@ -14,15 +14,14 @@ namespace Proj.Services.ProductService
     public class ProductService : IProductService
     {
         //make all of these private fields
-        public IMapper Mapper { get; }
-        public DataContext Context { get; }
-        public IHttpContextAccessor HttpContextAccessor { get; }
+        private readonly IMapper Mapper;
+        private readonly DataContext Context;
+        private readonly IHttpContextAccessor HttpContextAccessor;
         public ProductService(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
         {
             this.HttpContextAccessor = httpContextAccessor;
             this.Context = context;
             this.Mapper = mapper;
-
         }
 
         //make exception here 
