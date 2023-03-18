@@ -7,6 +7,7 @@ using Proj.Dtos;
 using Proj.Dtos.Product;
 using Proj.Dtos.Factory;
 using Proj.Dtos.Material;
+using Proj.Dtos.User;
 
 namespace Proj
 {
@@ -19,6 +20,7 @@ namespace Proj
             CreateMap<StakeholderUpdateProductDto, Product>();
             CreateMap<Factory, GetFactoryDto>();
             CreateMap<Material, GetMaterialDto>();
+            CreateMap<User, UserDto>();
 
         }
     }
