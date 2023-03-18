@@ -13,7 +13,7 @@ namespace Proj.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class FactoryController : ControllerBase
     {
         private readonly IFactoryService factoryService;

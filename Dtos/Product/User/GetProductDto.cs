@@ -15,7 +15,7 @@ namespace Proj.Dtos.Product
         public double Price { get; set; }
         public int Discount { get; set; }
         public ColorClass Color { get; set; } = ColorClass.White;
-        public List<Image> Images { get; set; }
+        public List<Image> Images { get; set; } 
         public int Height { get; set; }
         public int Width { get; set; }
         public int Depth { get; set; }

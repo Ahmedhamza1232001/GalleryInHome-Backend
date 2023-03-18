@@ -13,6 +13,7 @@ namespace Proj.Services.ProductService
 {
     public class ProductService : IProductService
     {
+        //make all of these private fields
         public IMapper Mapper { get; }
         public DataContext Context { get; }
         public IHttpContextAccessor HttpContextAccessor { get; }
@@ -24,6 +25,7 @@ namespace Proj.Services.ProductService
 
         }
 
+        //make exception here 
         private int GetUserId() => int.Parse(this.HttpContextAccessor.HttpContext.User
         .FindFirstValue(ClaimTypes.NameIdentifier));
 

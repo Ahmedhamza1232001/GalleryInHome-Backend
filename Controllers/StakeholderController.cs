@@ -17,11 +17,10 @@ namespace Proj.Controllers
     [Route("api/[controller]")] //api word here is optional
     public class StakeholderController : ControllerBase
     {
-        public IProductService ProductService { get; }
+        public IProductService ProductService { get; } //need to make this private and readonly feild
         public StakeholderController(IProductService productService)
         {
             this.ProductService = productService;
-
         }
        
         
