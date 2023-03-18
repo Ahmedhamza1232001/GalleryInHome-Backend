@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace Proj.Dtos.User
 {
-    public class UserLoginDto
+    public class UserLoginDto:UserDto
     {
-        public string UserName { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+       
     }
 }
