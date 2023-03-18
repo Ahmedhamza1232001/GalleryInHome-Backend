@@ -1,38 +1,33 @@
-// using System.Reflection;
-// using System;
-// using System.Collections.Generic;
-// using System.Linq;
-// using System.Threading.Tasks;
-// using Microsoft.AspNetCore.Mvc;
-// using Microsoft.AspNetCore.Authorization;
-// using Proj.Dtos.Product;
-// using Proj.Services.ProductService;
+using System.Net;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Proj.Dtos.Product;
+using Proj.Services.ProductService;
+using Microsoft.AspNetCore.Authorization;
+using Proj.Services.UserService;
 
-// namespace Proj.Controllers
-// {
-//     [ApiController]
-//     [Route("[controller]")]
-//     public class AdminController:ControllerBase
-//     {
-        
+namespace Proj.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
+    public class AdminController : ControllerBase
+    {
 
-//         public IProductService ProductService { get; }
-//         public AdminController(IProductService productService)
-//         {
-//             this.ProductService = productService;
 
-//         }
-//         [AllowAnonymous]
-//         [HttpGet("GetAllProducts")]
-//         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> GetAll()
-//         {
+        private readonly IUserService UserService;
+        public AdminController(IUserService userService)
+        {
+            this.UserService = userService;
+        }
 
-//             return Ok(await this.ProductService.GetAllUnAuth());
-//         }
-//         [HttpPost]
-//         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> AddProduct(AddProductDto product)
-//         {
-//             return Ok(await this.ProductService.AddProduct(product));
-//         }
-//     }
-// }
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> Get()
+        {
+            return Ok(await this.UserService.GetAllUsers());
+        }
+    }
+}
