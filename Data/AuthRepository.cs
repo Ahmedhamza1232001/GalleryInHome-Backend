@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Proj.Dtos.User;
 
 namespace Proj.Data
 {
@@ -24,6 +25,13 @@ namespace Proj.Data
             var response = new ServiceResponse<object>();
             var user = await this.Context.Users
             .FirstOrDefaultAsync(u => u.UserName.ToLower().Equals(username.ToLower()));
+            UserLoginDto userDto = new UserLoginDto();
+            userDto.FirstName = user.FirstName;
+            userDto.LastName = user.LastName;
+            userDto.Age = user.Age;
+            userDto.Email = user.Email;
+            userDto.UserName = user.UserName;
+
 
             if (user == null)
             {
@@ -37,7 +45,7 @@ namespace Proj.Data
             }
             else
             {
-                response.Data = new List<object>(){CreateToken(user),user};
+                response.Data = new List<object>(){CreateToken(user),userDto};
                 
             }
             return response;
