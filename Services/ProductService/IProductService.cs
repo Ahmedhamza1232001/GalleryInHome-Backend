@@ -10,6 +10,7 @@ namespace Proj.Services.ProductService
     public interface IProductService
     {
         Task<ServiceResponse<List<StakeholderGetProductDto>>> GetAllProducts();
+        Task<ServiceResponse<List<StakeholderGetProductDto>>> GetStakeholderProducts();
         Task<ServiceResponse<List<StakeholderGetProductDto>>> GetAllUnAuth();
         Task<ServiceResponse<StakeholderGetProductDto>> GetProductById(int id);
         Task<ServiceResponse<List<StakeholderGetProductDto>>> AddProduct(StakeholderAddProductDto newProduct);
