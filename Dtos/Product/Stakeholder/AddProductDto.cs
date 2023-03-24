@@ -21,5 +21,6 @@ namespace Proj.Dtos.Product
         public int Warranty { get; set; }
         //public List<Material> Materials { get; set; }
         public bool IsFavo { get; set; }
+        public string Reel { get; set; } = string.Empty;
     }
 }
