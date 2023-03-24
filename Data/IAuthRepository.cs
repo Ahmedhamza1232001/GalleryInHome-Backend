@@ -7,7 +7,7 @@ namespace Proj.Data
 {
     public interface IAuthRepository
     {
-        Task<ServiceResponse<int>> Register(User user, string password);
+        Task<ServiceResponse<List<object>>> Register(User user, string password);
         Task<ServiceResponse<object>> Login(string username, string password);
         Task<bool> UserExist(string username);
     }
