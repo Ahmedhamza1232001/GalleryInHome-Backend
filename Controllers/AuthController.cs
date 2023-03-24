@@ -38,7 +38,7 @@ namespace Proj.Controllers
             return Ok(response);
         }
         [HttpPost("login")]
-        public async Task<ActionResult<ServiceResponse<string>>> Login(UserDto request)
+        public async Task<ActionResult<ServiceResponse<string>>> Login(UserLoginDto request)
         {
             var response = await this.authRepo.Login(request.UserName,request.Password);
             if (!response.Success)
