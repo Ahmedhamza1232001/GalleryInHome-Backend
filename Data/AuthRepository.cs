@@ -31,6 +31,8 @@ namespace Proj.Data
             userDto.Age = user.Age;
             userDto.Email = user.Email;
             userDto.UserName = user.UserName;
+            string tokenCreated = CreateToken(user);
+            userDto.Token = tokenCreated;
 
 
             if (user == null)
@@ -45,17 +47,18 @@ namespace Proj.Data
             }
             else
             {
-                response.Data = new List<object>(){CreateToken(user),userDto};
+                response.Data = new List<object>(){tokenCreated,userDto};
                 
             }
             return response;
 
         }
 
-        public async Task<ServiceResponse<int>> Register(User user, string password)
+        public async Task<ServiceResponse<List<object>>> Register(User user, string password)
         {
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-            ServiceResponse<int> response = new ServiceResponse<int>();
+            ServiceResponse<List<object>> response = new ServiceResponse<List<object>>();
+            string tokenCreated = CreateToken(user);
             if (await UserExist(user.UserName))
             {
                 response.Success = false;
@@ -69,7 +72,7 @@ namespace Proj.Data
             this.Context.Users.Add(user);
             await this.Context.SaveChangesAsync();
 
-            response.Data = user.Id;
+            response.Data = new List<object> { user.Id, tokenCreated };
             return response;
         }
 

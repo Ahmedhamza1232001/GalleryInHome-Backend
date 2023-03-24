@@ -43,7 +43,7 @@ namespace Proj.Services.ProductService
             return serviceresponse;
         }
 
-        public async Task<ServiceResponse<List<StakeholderGetProductDto>>> GetAllProducts()
+        public async Task<ServiceResponse<List<StakeholderGetProductDto>>> GetStakeholderProducts()
         {
             var response = new ServiceResponse<List<StakeholderGetProductDto>>();
             var dbProducts = await this.Context.Products
@@ -56,6 +56,7 @@ namespace Proj.Services.ProductService
             response.Data = dbProducts.Select(p => this.Mapper.Map<StakeholderGetProductDto>(p)).ToList();
             return response;
         }
+        
         public async Task<ServiceResponse<List<StakeholderGetProductDto>>> GetAllUnAuth()
         {
             var response = new ServiceResponse<List<StakeholderGetProductDto>>();
@@ -186,6 +187,19 @@ namespace Proj.Services.ProductService
                 response.Message = ex.Message;
             }
             return response;
+        }
+
+        public async Task<ServiceResponse<List<StakeholderGetProductDto>>> GetAllProducts()
+        {
+            var response = new ServiceResponse<List<StakeholderGetProductDto>>();
+            var dbProducts = await this.Context.Products
+            .Include(p => p.Factory)
+            .Include(p => p.Materials)
+            .Include(p => p.Images)
+            .ToListAsync();
+            //why we use mapping here 
+            response.Data = dbProducts.Select(p => this.Mapper.Map<StakeholderGetProductDto>(p)).ToList();
+            return response;  
         }
     }
 }
