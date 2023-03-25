@@ -23,19 +23,9 @@ namespace Proj.Data
         public async Task<ServiceResponse<object>> Login(string username, string password)
         {
             var response = new ServiceResponse<object>();
-            var user = await this.Context.Users
+            var user = await this.Context.Users 
             .FirstOrDefaultAsync(u => u.UserName.ToLower().Equals(username.ToLower()));
-            UserLoginDto userDto = new UserLoginDto();
-            userDto.FirstName = user.FirstName;
-            userDto.LastName = user.LastName;
-            userDto.Age = user.Age;
-            userDto.Email = user.Email;
-            userDto.UserName = user.UserName;
-            string tokenCreated = CreateToken(user);
-            userDto.Token = tokenCreated;
-
-
-            if (user == null)
+            if (user == null) //need to modfiy this to be an exception 
             {
                 response.Success = false;
                 response.Message = "User not found.";
@@ -47,6 +37,13 @@ namespace Proj.Data
             }
             else
             {
+                UserDto userDto = new UserDto();
+                userDto.FirstName = user.FirstName;
+                userDto.LastName = user.LastName;
+                userDto.Age = user.Age;
+                userDto.Email = user.Email;
+                userDto.UserName = user.UserName;
+                string tokenCreated = CreateToken(user);
                 response.Data = new List<object>(){tokenCreated,userDto};
                 
             }
