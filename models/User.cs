@@ -10,12 +10,11 @@ namespace Proj.models
         
         public int Id { get; set; }
         public string UserName { get; set; } = string.Empty;
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public int Age { get; set; }
         public string Email { get; set; } = string.Empty;
-        public byte[] PasswordHash { get; set; } = new byte[] { }; //I'll change this and make exception
+        public byte[] PasswordHash { get; set; } = new byte[] { }; //I'll change the intilization of this  and make exception 
         public byte[] PasswordSalt { get; set; } = new byte[] { };
+        // public List<string>? Cart { get; set; } 
+        // public List<string>? Favorite { get; set; }
         //public Adress? Adress { get; set; }
 
 

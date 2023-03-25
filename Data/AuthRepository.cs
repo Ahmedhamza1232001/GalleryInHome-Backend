@@ -20,11 +20,11 @@ namespace Proj.Data
             this.Context = context;
 
         }
-        public async Task<ServiceResponse<object>> Login(string username, string password)
+        public async Task<ServiceResponse<object>> Login(string email, string password)
         {
             var response = new ServiceResponse<object>();
             var user = await this.Context.Users 
-            .FirstOrDefaultAsync(u => u.UserName.ToLower().Equals(username.ToLower()));
+            .FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
             if (user == null) //need to modfiy this to be an exception 
             {
                 response.Success = false;
@@ -39,9 +39,7 @@ namespace Proj.Data
             {
                 UserDto userDto = new UserDto();
                 string tokenCreated = CreateToken(user);
-                userDto.FirstName = user.FirstName;
-                userDto.LastName = user.LastName;
-                userDto.Age = user.Age;
+               
                 userDto.Email = user.Email;
                 userDto.UserName = user.UserName;
                 userDto.Token = tokenCreated;
@@ -58,7 +56,7 @@ namespace Proj.Data
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
             ServiceResponse<List<object>> response = new ServiceResponse<List<object>>();
             string tokenCreated = CreateToken(user);
-            if (await UserExist(user.UserName))
+            if (await UserExist(user.Email)) //Email instade of username 
             {
                 response.Success = false;
                 response.Message = "User aleready exists.";
@@ -70,8 +68,14 @@ namespace Proj.Data
 
             this.Context.Users.Add(user);
             await this.Context.SaveChangesAsync();
+            UserDto userDto = new UserDto();
+            userDto.Email = user.Email;
+            userDto.UserName = user.UserName;
+            userDto.Password = string.Empty;
+            
 
-            response.Data = new List<object> { user.Id, tokenCreated };
+
+            response.Data = new List<object> { user, tokenCreated };
             return response;
         }
 
@@ -93,9 +97,9 @@ namespace Proj.Data
             }
         }
 
-        public async Task<bool> UserExist(string username)
+        public async Task<bool> UserExist(string email)
         {
-            if (await this.Context.Users.AnyAsync(u => u.UserName.ToLower() == username.ToLower()))
+            if (await this.Context.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower()))
             {
                 return true;
             }

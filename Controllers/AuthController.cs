@@ -25,9 +25,7 @@ namespace Proj.Controllers
                 new User 
                 { 
                     UserName = request.UserName,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    Age = request.Age,
+                    
                     Email = request.Email
                 }, 
                 request.Password
@@ -40,7 +38,7 @@ namespace Proj.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<ServiceResponse<string>>> Login(UserLoginDto request)
         {
-            var response = await this.authRepo.Login(request.UserName,request.Password);
+            var response = await this.authRepo.Login(request.Email,request.Password);
             if (!response.Success)
             {
                 return BadRequest(response);
