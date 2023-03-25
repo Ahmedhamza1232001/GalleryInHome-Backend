@@ -19,8 +19,14 @@ namespace Proj.models
         //public Adress? Adress { get; set; }
 
 
-        //Relationships
+        //Relationships & navigationProperty
+
+        //one to many
         public List<Product>? Products { get; set; }
+        //need to put here ForeignKey
+
+        public Adress Adress { get; set; } = new Adress();
+        
 
 
     }
