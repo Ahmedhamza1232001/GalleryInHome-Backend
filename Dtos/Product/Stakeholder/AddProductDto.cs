@@ -13,7 +13,7 @@ namespace Proj.Dtos.Product
         public int Discount { get; set; }
         public ColorClass Color { get; set; } = ColorClass.White;
         //public List<Category> Categories { get; set; }
-        public List<Image> Images { get; set; }
+        public List<Image> Images { get; set; } = new List<Image>();
         public int Height { get; set; }
         public int Width { get; set; }
         public int Depth { get; set; }

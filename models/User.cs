@@ -16,7 +16,7 @@ namespace Proj.models
         public string Email { get; set; } = string.Empty;
         public byte[] PasswordHash { get; set; } = new byte[] { }; //I'll change this and make exception
         public byte[] PasswordSalt { get; set; } = new byte[] { };
-        public Adress? Adress { get; set; }
+        //public Adress? Adress { get; set; }
 
 
         //Relationships
