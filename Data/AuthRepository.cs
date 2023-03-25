@@ -38,13 +38,15 @@ namespace Proj.Data
             else
             {
                 UserDto userDto = new UserDto();
+                string tokenCreated = CreateToken(user);
                 userDto.FirstName = user.FirstName;
                 userDto.LastName = user.LastName;
                 userDto.Age = user.Age;
                 userDto.Email = user.Email;
                 userDto.UserName = user.UserName;
-                string tokenCreated = CreateToken(user);
-                response.Data = new List<object>(){tokenCreated,userDto};
+                userDto.Token = tokenCreated;
+
+                response.Data = userDto;
                 
             }
             return response;
