@@ -19,6 +19,24 @@ namespace Proj.Data
                 new Material { Id = 2, Name = "Glass" },
                 new Material { Id = 3, Name = "Fiber" }
             );
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Products)
+                .WithMany(u => u.Users)
+                .UsingEntity<Favorite>(
+                j => j
+                    .HasOne(f => f.Product)
+                    .WithMany(p => p.Favorites)
+                    .HasForeignKey(f => f.ProductId),
+                j => j
+                    .HasOne(f => f.User)
+                    .WithMany(u => u.Favorites)
+                    .HasForeignKey(f => f.UserId),
+                j => j.HasKey(t => new { t.UserId, t.ProductId })
+                );
+
+
+
         }
         public DbSet<Product> Products => Set<Product>();
         public DbSet<User> Users => Set<User>();

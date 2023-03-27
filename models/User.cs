@@ -19,7 +19,20 @@ namespace Proj.models
 
 
         //Relationships
-        public List<Product>? Products { get; set; }
+
+        //one to many relationship
+        //public List<Product>? Products { get; set; }
+
+        //one to many relationship
+        public List<Favorite> Favorites { get; set; } = new List<Favorite>();
+
+        //many to many relationship
+        public List<Product> Products { get; set; } = new List<Product>();
+
+        //one to one relationship 
+
+
+
 
 
     }
