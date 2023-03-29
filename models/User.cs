@@ -19,7 +19,7 @@ namespace Proj.models
 
 
         //Relationships
-        public List<Product>? Products { get; set; }
+        //public List<Product>? Products { get; set; }
 
 
     }
