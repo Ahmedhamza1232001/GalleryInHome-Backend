@@ -23,9 +23,9 @@ namespace Proj.Data
         public async Task<ServiceResponse<object>> Login(string email, string password)
         {
             var response = new ServiceResponse<object>();
-            var user = await this.Context.Users 
+            var user = await this.Context.Users
             .FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
-            if (user == null) //need to modfiy this to be an exception 
+            if (user == null) //need to modfiy this to be an exception
             {
                 response.Success = false;
                 response.Message = "User not found.";
@@ -37,15 +37,15 @@ namespace Proj.Data
             }
             else
             {
-                UserDto userDto = new UserDto();
+                UserDto userDto = new();
                 string tokenCreated = CreateToken(user);
-               
+
                 userDto.Email = user.Email;
                 userDto.UserName = user.UserName;
                 userDto.Token = tokenCreated;
 
                 response.Data = userDto;
-                
+
             }
             return response;
 
@@ -54,9 +54,9 @@ namespace Proj.Data
         public async Task<ServiceResponse<List<object>>> Register(User user, string password)
         {
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-            ServiceResponse<List<object>> response = new ServiceResponse<List<object>>();
+            ServiceResponse<List<object>> response = new();
             string tokenCreated = CreateToken(user);
-            if (await UserExist(user.Email)) //Email instade of username 
+            if (await UserExist(user.Email)) //Email instade of username
             {
                 response.Success = false;
                 response.Message = "User aleready exists.";
@@ -68,11 +68,13 @@ namespace Proj.Data
 
             this.Context.Users.Add(user);
             await this.Context.SaveChangesAsync();
-            UserDto userDto = new UserDto();
-            userDto.Email = user.Email;
-            userDto.UserName = user.UserName;
-            userDto.Password = string.Empty;
-            
+            _ = new UserDto()
+            {
+                Email = user.Email,
+                UserName = user.UserName,
+                Password = string.Empty
+            };
+
 
 
             response.Data = new List<object> { user, tokenCreated };
@@ -81,20 +83,16 @@ namespace Proj.Data
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
+            using var hmac = new System.Security.Cryptography.HMACSHA512();
+            passwordSalt = hmac.Key;
+            passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
         }
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
-            {
-                var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                return computeHash.SequenceEqual(passwordHash);
-            }
+            using var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt);
+            var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            return computeHash.SequenceEqual(passwordHash);
         }
 
         public async Task<bool> UserExist(string email)
@@ -108,7 +106,7 @@ namespace Proj.Data
 
         private string CreateToken(User user)
         {
-            List<Claim> claims = new List<Claim>
+            List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName)
@@ -118,19 +116,18 @@ namespace Proj.Data
             if (appSettingsToken is null)
                 throw new Exception("AppSettings Token is null!");
 
-            SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
-            .GetBytes(appSettingsToken));
+            SymmetricSecurityKey key = new(System.Text.Encoding.UTF8.GetBytes(appSettingsToken));
 
-            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            SigningCredentials creds = new(key, SecurityAlgorithms.HmacSha512Signature);
 
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+            SecurityTokenDescriptor tokenDescriptor = new()
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = creds
             };
 
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityTokenHandler tokenHandler = new();
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
 
