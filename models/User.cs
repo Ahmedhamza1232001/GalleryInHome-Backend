@@ -7,13 +7,13 @@ namespace Proj.models
 {
     public class User
     {
-        
+
         public int Id { get; set; }
         public string UserName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public byte[] PasswordHash { get; set; } = new byte[] { }; //I'll change the intilization of this  and make exception 
-        public byte[] PasswordSalt { get; set; } = new byte[] { };
-        // public List<string>? Cart { get; set; } 
+        public string Email { get; set; } = string.Empty; //what is the difference between string.empty and ""
+        public byte[] PasswordHash { get; set; } = Array.Empty<byte>(); //I'll change the intilization of this  and make exception //new byte[] { }
+        public byte[] PasswordSalt { get; set; } = Array.Empty<byte>();
+        // public List<string>? Cart { get; set; }
         // public List<string>? Favorite { get; set; }
         //public Adress? Adress { get; set; }
 
