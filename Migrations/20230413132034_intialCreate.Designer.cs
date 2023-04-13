@@ -12,8 +12,8 @@ using Proj.Data;
 namespace Proj.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230325025823_UserAdress")]
-    partial class UserAdress
+    [Migration("20230413132034_intialCreate")]
+    partial class intialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,41 +38,6 @@ namespace Proj.Migrations
                     b.HasIndex("ProductsId");
 
                     b.ToTable("MaterialProduct");
-                });
-
-            modelBuilder.Entity("Proj.models.Adress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Adress");
                 });
 
             modelBuilder.Entity("Proj.models.Factory", b =>
@@ -231,18 +196,7 @@ namespace Proj.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -276,17 +230,6 @@ namespace Proj.Migrations
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Proj.models.Adress", b =>
-                {
-                    b.HasOne("Proj.models.User", "User")
-                        .WithOne("Adress")
-                        .HasForeignKey("Proj.models.Adress", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Proj.models.Factory", b =>
@@ -325,9 +268,6 @@ namespace Proj.Migrations
 
             modelBuilder.Entity("Proj.models.User", b =>
                 {
-                    b.Navigation("Adress")
-                        .IsRequired();
-
                     b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
