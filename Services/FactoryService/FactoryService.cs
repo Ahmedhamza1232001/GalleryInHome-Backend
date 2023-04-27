@@ -25,7 +25,7 @@ namespace Proj.Services.FactoryService
         }
         public async Task<ServiceResponse<StakeholderGetProductDto>> AddFactory(AddFactoryDto newFactory)
         {
-            ServiceResponse<StakeholderGetProductDto> response = new ServiceResponse<StakeholderGetProductDto>();
+            ServiceResponse<StakeholderGetProductDto> response = new();
             try
             {
                 Product product = await this.context.Products
@@ -38,7 +38,8 @@ namespace Proj.Services.FactoryService
                     return response;
                 }
 
-                Factory factory = new Factory{
+                Factory factory = new()
+                {
                     Name = newFactory.Name,
                     Product = product
                 };

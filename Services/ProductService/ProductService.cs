@@ -24,7 +24,7 @@ namespace Proj.Services.ProductService
             this.Mapper = mapper;
         }
 
-        //make exception here 
+        //make exception here
         private int GetUserId() => int.Parse(this.HttpContextAccessor.HttpContext.User
         .FindFirstValue(ClaimTypes.NameIdentifier));
 
@@ -52,11 +52,11 @@ namespace Proj.Services.ProductService
             .Include(p => p.Materials)
             .Include(p =>p.Images)
             .ToListAsync();
-            //why we use mapping here 
+            //why we use mapping here
             response.Data = dbProducts.Select(p => this.Mapper.Map<StakeholderGetProductDto>(p)).ToList();
             return response;
         }
-        
+
         public async Task<ServiceResponse<List<StakeholderGetProductDto>>> GetAllUnAuth()
         {
             var response = new ServiceResponse<List<StakeholderGetProductDto>>();
@@ -82,7 +82,7 @@ namespace Proj.Services.ProductService
 
         public async Task<ServiceResponse<StakeholderGetProductDto>> UpdateProduct(StakeholderUpdateProductDto updatedProduct)
         {
-            ServiceResponse<StakeholderGetProductDto> response = new ServiceResponse<StakeholderGetProductDto>();
+            ServiceResponse<StakeholderGetProductDto> response = new();
 
             try
             {
@@ -118,7 +118,7 @@ namespace Proj.Services.ProductService
 
         public async Task<ServiceResponse<List<StakeholderGetProductDto>>> DeleteProduct(int id)
         {
-            ServiceResponse<List<StakeholderGetProductDto>> response = new ServiceResponse<List<StakeholderGetProductDto>>();
+            ServiceResponse<List<StakeholderGetProductDto>> response = new();
 
             try
             {
@@ -197,9 +197,9 @@ namespace Proj.Services.ProductService
             .Include(p => p.Materials)
             .Include(p => p.Images)
             .ToListAsync();
-            //why we use mapping here 
+            //why we use mapping here
             response.Data = dbProducts.Select(p => this.Mapper.Map<StakeholderGetProductDto>(p)).ToList();
-            return response;  
+            return response;
         }
     }
 }
