@@ -13,21 +13,21 @@ namespace Proj.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    
+
     public class UserController:ControllerBase
     {
-        private readonly IProductService ProductService;  
+        private readonly IProductService _productService;
         public UserController(IProductService productService)
         {
-            this.ProductService = productService;
+            _productService = productService;
         }
 
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> Get()
         {
-            return Ok(await this.ProductService.GetAllProducts());
+            return Ok(await _productService.GetAllProducts());
         }
-        
-        
+
+
     }
 }

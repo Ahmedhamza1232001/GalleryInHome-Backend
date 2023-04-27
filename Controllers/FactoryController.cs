@@ -16,17 +16,17 @@ namespace Proj.Controllers
     [Route("api/[controller]")]
     public class FactoryController : ControllerBase
     {
-        private readonly IFactoryService factoryService;
+        private readonly IFactoryService _factoryService;
 
         public FactoryController(IFactoryService factoryService)
         {
-            this.factoryService = factoryService;
+            _factoryService = factoryService;
         }
 
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<StakeholderGetProductDto>>> AddFactory(AddFactoryDto newFactory)
         {
-            return Ok(await this.factoryService.AddFactory(newFactory));
+            return Ok(await _factoryService.AddFactory(newFactory));
         }
     }
 }

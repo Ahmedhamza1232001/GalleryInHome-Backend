@@ -17,29 +17,29 @@ namespace Proj.Controllers
     [Route("api/[controller]")] //api word here is optional
     public class StakeholderController : ControllerBase
     {
-        public IProductService ProductService { get; } //need to make this private and readonly feild
+        private readonly IProductService _productService;
         public StakeholderController(IProductService productService)
         {
-            this.ProductService = productService;
+            _productService = productService;
         }
-       
-        
-        [HttpGet("GetAll")] 
+
+
+        [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> Get()
         {
-            return Ok(await this.ProductService.GetAllProducts());
+            return Ok(await _productService.GetAllProducts());
         }
-        
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<StakeholderGetProductDto>>> GetSingle(int id)
         {
-            return Ok(await this.ProductService.GetProductById(id));
+            return Ok(await _productService.GetProductById(id));
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> Delete(int id)
         {
-            var response = await this.ProductService.DeleteProduct(id);
+            var response = await _productService.DeleteProduct(id);
             if (response.Data == null)
             {
                 return NotFound(response);
@@ -49,12 +49,12 @@ namespace Proj.Controllers
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> AddProduct(StakeholderAddProductDto product)
         {
-            return Ok(await this.ProductService.AddProduct(product));
+            return Ok(await _productService.AddProduct(product));
         }
         [HttpPut]
         public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> UpdateProduct(StakeholderUpdateProductDto updatedProduct)
         {
-            var response = await this.ProductService.UpdateProduct(updatedProduct);
+            var response = await _productService.UpdateProduct(updatedProduct);
             if (response.Data == null)
             {
                 return NotFound(response);
@@ -65,7 +65,7 @@ namespace Proj.Controllers
         [HttpPost("Material")]
         public async Task<ActionResult<ServiceResponse<StakeholderGetProductDto>>> AddProductMaterial(StakeholderAddProductMaterialDto newProductMaterial)
         {
-            return Ok(await this.ProductService.AddProductMaterial(newProductMaterial));
+            return Ok(await _productService.AddProductMaterial(newProductMaterial));
         }
 
 

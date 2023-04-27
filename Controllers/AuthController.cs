@@ -13,21 +13,21 @@ namespace Proj.Controllers
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthRepository authRepo;
+        private readonly IAuthRepository _authRepo;
         public AuthController(IAuthRepository authRepo)
         {
-            this.authRepo = authRepo;
+            _authRepo = authRepo;
         }
         [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
         {
-            var response = await this.authRepo.Register(
-                new User 
-                { 
+            var response = await _authRepo.Register(
+                new User
+                {
                     UserName = request.UserName,
-                    
+
                     Email = request.Email
-                }, 
+                },
                 request.Password
             );
             if(!response.Success){
@@ -38,7 +38,7 @@ namespace Proj.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<ServiceResponse<string>>> Login(UserLoginDto request)
         {
-            var response = await this.authRepo.Login(request.Email,request.Password);
+            var response = await _authRepo.Login(request.Email,request.Password);
             if (!response.Success)
             {
                 return BadRequest(response);

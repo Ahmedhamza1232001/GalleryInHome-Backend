@@ -18,16 +18,16 @@ namespace Proj.Controllers
     {
 
 
-        private readonly IUserService UserService;
+        private readonly IUserService _userService;
         public AdminController(IUserService userService)
         {
-            this.UserService = userService;
+            _userService = userService;
         }
 
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> Get()
         {
-            return Ok(await this.UserService.GetAllUsers());
+            return Ok(await _userService.GetAllUsers());
         }
     }
 }
