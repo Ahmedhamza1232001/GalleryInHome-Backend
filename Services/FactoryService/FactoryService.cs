@@ -13,24 +13,24 @@ namespace Proj.Services.FactoryService
 {
     public class FactoryService : IFactoryService
     {
-        private readonly DataContext context;
-        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IMapper mapper;
+        private readonly DataContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMapper _mapper;
 
         public FactoryService(DataContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
-            this.context = context;
-            this.httpContextAccessor = httpContextAccessor;
-            this.mapper = mapper;
+            _context = context;
+            _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
         }
         public async Task<ServiceResponse<StakeholderGetProductDto>> AddFactory(AddFactoryDto newFactory)
         {
             ServiceResponse<StakeholderGetProductDto> response = new();
             try
             {
-                Product product = await this.context.Products
+                Product product = await _context.Products
                 .FirstOrDefaultAsync(p => p.Id == newFactory.ProductId &&
-                p.User.Id == int.Parse(httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)));
+                p.User.Id == int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)));
                 if (product == null)
                 {
                     response.Success = false;
@@ -46,9 +46,9 @@ namespace Proj.Services.FactoryService
 
 
 
-            this.context.Factories.Add(factory);
-                await this.context.SaveChangesAsync();
-                response.Data = this.mapper.Map<StakeholderGetProductDto>(product);
+            _context.Factories.Add(factory);
+                await _context.SaveChangesAsync();
+                response.Data = _mapper.Map<StakeholderGetProductDto>(product);
             }
             catch (Exception ex)
             {

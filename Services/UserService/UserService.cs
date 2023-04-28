@@ -11,20 +11,20 @@ namespace Proj.Services.UserService
 {
     public class UserService : IUserService
     {
-        private readonly IMapper Mapper;
-        private readonly DataContext Context;
-        private readonly IHttpContextAccessor HttpContextAccessor;
+        private readonly IMapper _mapper;
+        private readonly DataContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public UserService(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
         {
-            this.HttpContextAccessor = httpContextAccessor;
-            this.Context = context;
-            this.Mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+            _context = context;
+            _mapper = mapper;
         }
         public async Task<ServiceResponse<List<UserDto>>> GetAllUsers()
         {
             var response = new ServiceResponse<List<UserDto>>();
-            var dbUsers = await this.Context.Users.ToListAsync();
-            response.Data = dbUsers.Select(u => this.Mapper.Map<UserDto>(u)).ToList();
+            var dbUsers = await _context.Users.ToListAsync();
+            response.Data = dbUsers.Select(u => _mapper.Map<UserDto>(u)).ToList();
             return response;
         }
     }
