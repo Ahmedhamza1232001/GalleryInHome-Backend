@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Proj.Dtos
 {
-    public class UserUpdateProductDto
+    public class ClientUpdateProductDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;

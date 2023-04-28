@@ -7,7 +7,7 @@ using Proj.Dtos.Material;
 
 namespace Proj.Dtos.Product
 {
-    public class UserGetProductDto
+    public class ClientGetProductDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;

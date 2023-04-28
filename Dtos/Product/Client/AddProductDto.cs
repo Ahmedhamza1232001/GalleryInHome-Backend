@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Proj.Dtos.Product
 {
-    public class UserAddProductDto
+    public class ClientAddProductDto
     {
-       
+
     }
 }

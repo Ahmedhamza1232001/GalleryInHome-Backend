@@ -14,10 +14,10 @@ namespace Proj.Controllers
     [ApiController]
     [Route("api/[controller]")]
 
-    public class UserController:ControllerBase
+    public class ClientController:ControllerBase
     {
         private readonly IProductService _productService;
-        public UserController(IProductService productService)
+        public ClientController(IProductService productService)
         {
             _productService = productService;
         }
@@ -26,6 +26,12 @@ namespace Proj.Controllers
         public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> Get()
         {
             return Ok(await _productService.GetAllProducts());
+        }
+        [HttpPost]
+
+        public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> AddProduct(StakeholderAddProductDto product)
+        {
+            return Ok(await _productService.AddProduct(product));
         }
 
 

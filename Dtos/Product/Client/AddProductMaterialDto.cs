@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Proj.Dtos.Product
 {
-    public class UserAddProductMaterialDto
+    public class ClientAddProductMaterialDto
     {
         public int ProductId { get; set; }
         public int MaterialId { get; set; }
