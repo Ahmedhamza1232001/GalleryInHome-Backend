@@ -28,7 +28,6 @@ namespace Proj.Services.ProductService
         private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User
         .FindFirstValue(ClaimTypes.NameIdentifier));
 
-
         public async Task<ServiceResponse<List<StakeholderGetProductDto>>> AddProduct(StakeholderAddProductDto newProduct)
         {
             var serviceresponse = new ServiceResponse<List<StakeholderGetProductDto>>();
