@@ -8,6 +8,7 @@ using Proj.Services.FactoryService;
 using Proj.Services.ProductService;
 using Proj.Services.UserService;
 using Swashbuckle.AspNetCore.Filters;
+using Microsoft.AspNetCore.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,14 +41,6 @@ builder.Services.AddSwaggerGen(c =>
 var provider = builder.Services.BuildServiceProvider();
 var configuration = provider.GetRequiredService<IConfiguration>();
 
-// builder.Services.AddCors(options =>
-// {
-//     var frontendURL = configuration.GetValue<string>("frontend_url");
-//     options.AddDefaultPolicy(builder =>
-//     {
-//         builder.WithOrigins(frontendURL).AllowAnyMethod().AllowAnyHeader();
-//     });
-// });
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 //to make webApi know which implementaion use for IproductService
@@ -56,16 +49,16 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
   .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
-                .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-            ValidateIssuer = false,
-            ValidateAudience = false
-        };
-    });
+  {
+      options.TokenValidationParameters = new TokenValidationParameters
+      {
+          ValidateIssuerSigningKey = true,
+          IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+              .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+          ValidateIssuer = false,
+          ValidateAudience = false
+      };
+  });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IFactoryService, FactoryService>();
 
@@ -79,6 +72,8 @@ app.UseSwaggerUI();
 if (app.Environment.IsDevelopment())
 {
 }
+
+app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseHttpsRedirection();
 app.UseCors();
