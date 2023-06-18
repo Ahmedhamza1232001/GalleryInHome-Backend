@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Proj.Dtos.Factory;
 using Proj.Dtos.Material;
 
 namespace Proj.Dtos.Product
 {
-    public class ClientGetProductDto
+    public class GetProductDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -22,7 +21,6 @@ namespace Proj.Dtos.Product
         public string MadeIn { get; set; } = string.Empty;
         public int Warranty { get; set; }
         public bool IsFavo { get; set; }
-        public GetFactoryDto? Factory { get; set; }
         public List<GetMaterialDto>? Materials { get; set; }
         public bool InStock { get; set; } = true;
         public string Model { get; set; } = string.Empty;

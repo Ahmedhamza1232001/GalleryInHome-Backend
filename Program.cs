@@ -3,10 +3,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Proj.Api.Services.UserService;
 using Proj.Data;
-using Proj.Services.FactoryService;
 using Proj.Services.ProductService;
-using Proj.Services.UserService;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,7 +48,7 @@ var configuration = provider.GetRequiredService<IConfiguration>();
 //     });
 // });
 
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddAutoMapper(typeof(Program).Assembly); 
 //to make webApi know which implementaion use for IproductService
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -67,7 +66,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IFactoryService, FactoryService>();
+//builder.Services.AddScoped<IFactoryService, FactoryService>();
 
 var app = builder.Build();
 

@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace Proj.Dtos.Product
 {
-    public class StakeholderAddProductMaterialDto
+    public class AddProductDto
     {
-        public int ProductId { get; set; }
-        public int MaterialId { get; set; }
+
     }
 }

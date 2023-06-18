@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Proj.Dtos;
 using Proj.Dtos.Product;
-using Proj.Dtos.Factory;
 using Proj.Dtos.Material;
 using Proj.Dtos.User;
 
@@ -15,12 +14,11 @@ namespace Proj
     {
         public AutoMapperProfile()
         {
-            CreateMap<Product, StakeholderGetProductDto>();
-            CreateMap<StakeholderAddProductDto, Product>();
-            CreateMap<StakeholderUpdateProductDto, Product>();
-            CreateMap<Factory, GetFactoryDto>();
+            CreateMap<Product, GetProductDto>();
+            CreateMap<AddProductDto, Product>();
+            CreateMap<UpdateProductDto, Product>();
             CreateMap<Material, GetMaterialDto>();
-            CreateMap<User, UserDto>();
+            CreateMap<User, GetUserDto>();
 
         }
     }

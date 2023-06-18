@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Proj.Dtos.Product;
 using Proj.Services.ProductService;
 using Microsoft.AspNetCore.Authorization;
-using Proj.Services.UserService;
+
 
 namespace Proj.Controllers
 {
@@ -23,16 +23,16 @@ namespace Proj.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Get()
         {
             return Ok(await _productService.GetAllProducts());
         }
-        [HttpPost]
+       // [HttpPost]
 
-        public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> AddProduct(StakeholderAddProductDto product)
-        {
-            return Ok(await _productService.AddProduct(product));
-        }
+        // public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> AddProduct(StakeholderAddProductDto product)
+        // {
+        //     return Ok(await _productService.AddProduct(product));
+        // }
 
 
     }

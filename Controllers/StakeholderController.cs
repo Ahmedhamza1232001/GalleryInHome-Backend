@@ -25,19 +25,19 @@ namespace Proj.Controllers
 
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Get()
         {
             return Ok(await _productService.GetAllProducts());
         }
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<StakeholderGetProductDto>>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<GetProductDto>>> GetSingle(int id)
         {
             return Ok(await _productService.GetProductById(id));
         }
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> Delete(int id)
+        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Delete(int id)
         {
             var response = await _productService.DeleteProduct(id);
             if (response.Data == null)
@@ -47,12 +47,12 @@ namespace Proj.Controllers
             return Ok(response);
         }
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> AddProduct(StakeholderAddProductDto product)
-        {
-            return Ok(await _productService.AddProduct(product));
-        }
+        // public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> AddProduct(StakeholderAddProductDto product)
+        // {
+        //     return Ok(await _productService.AddProduct(product));
+        // }
         [HttpPut]
-        public async Task<ActionResult<ServiceResponse<List<StakeholderGetProductDto>>>> UpdateProduct(StakeholderUpdateProductDto updatedProduct)
+        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> UpdateProduct(UpdateProductDto updatedProduct)
         {
             var response = await _productService.UpdateProduct(updatedProduct);
             if (response.Data == null)
@@ -62,11 +62,11 @@ namespace Proj.Controllers
             return Ok(response);
         }
 
-        [HttpPost("Material")]
-        public async Task<ActionResult<ServiceResponse<StakeholderGetProductDto>>> AddProductMaterial(StakeholderAddProductMaterialDto newProductMaterial)
-        {
-            return Ok(await _productService.AddProductMaterial(newProductMaterial));
-        }
+        //[HttpPost("Material")]
+        // public async Task<ActionResult<ServiceResponse<StakeholderGetProductDto>>> AddProductMaterial(StakeholderAddProductMaterialDto newProductMaterial)
+        // {
+        //     return Ok(await _productService.AddProductMaterial(newProductMaterial));
+        // }
 
 
     }

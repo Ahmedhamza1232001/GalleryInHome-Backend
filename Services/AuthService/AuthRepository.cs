@@ -10,21 +10,23 @@ using Proj.Dtos.User;
 
 namespace Proj.Data
 {
-    //test comment on test branch 
+
     public class AuthRepository : IAuthRepository
     {
-        public DataContext Context { get; }
-        public IConfiguration Configuration { get; }
+        #region dependency injection
+        private readonly DataContext _context;
+        private readonly IConfiguration _configuration;
         public AuthRepository(DataContext context, IConfiguration configuration)
         {
-            this.Configuration = configuration;
-            this.Context = context;
+            _configuration = configuration;
+            _context = context;
 
         }
-        public async Task<ServiceResponse<object>> Login(string email, string password)
+        #endregion
+        public async Task<ServiceResponse<GetUserDto>> Login(string email, string password)
         {
-            var response = new ServiceResponse<object>();
-            var user = await this.Context.Users
+            var response = new ServiceResponse<GetUserDto>();
+            var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
             if (user == null) //need to modfiy this to be an exception
             {
@@ -38,7 +40,7 @@ namespace Proj.Data
             }
             else
             {
-                UserDto userDto = new();
+                GetUserDto userDto = new();
                 string tokenCreated = CreateToken(user);
 
                 userDto.Email = user.Email;
@@ -52,10 +54,10 @@ namespace Proj.Data
 
         }
 
-        public async Task<ServiceResponse<List<object>>> Register(User user, string password)
+        public async Task<ServiceResponse<GetUserDto>> Register(User user, string password)
         {
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-            ServiceResponse<List<object>> response = new();
+            ServiceResponse<GetUserDto> response = new();
             string tokenCreated = CreateToken(user);
             if (await UserExist(user.Email)) //Email instade of username
             {
@@ -67,29 +69,30 @@ namespace Proj.Data
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            this.Context.Users.Add(user);
-            await this.Context.SaveChangesAsync();
-            _ = new UserDto()
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            GetUserDto userDto = new()
             {
                 Email = user.Email,
                 UserName = user.UserName,
-                Password = string.Empty
+                Token = tokenCreated
             };
 
+            response.Data = userDto;
 
 
-            response.Data = new List<object> { user, tokenCreated };
+
             return response;
         }
 
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using var hmac = new System.Security.Cryptography.HMACSHA512();
             passwordSalt = hmac.Key;
             passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
         }
 
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt);
             var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
@@ -98,7 +101,7 @@ namespace Proj.Data
 
         public async Task<bool> UserExist(string email)
         {
-            if (await this.Context.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower()))
+            if (await _context.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower()))
             {
                 return true;
             }
@@ -113,7 +116,7 @@ namespace Proj.Data
                 new Claim(ClaimTypes.Name, user.UserName)
             };
 
-            var appSettingsToken = this.Configuration.GetSection("AppSettings:Token").Value;
+            var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
             if (appSettingsToken is null)
                 throw new Exception("AppSettings Token is null!");
 

@@ -2,16 +2,56 @@
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Proj.Migrations
 {
     /// <inheritdoc />
-    public partial class intialCreate : Migration
+    public partial class addtpc : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateSequence(
+                name: "UserSequence");
+
+            migrationBuilder.CreateTable(
+                name: "Card",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Card", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Client",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR [UserSequence]"),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Client", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Favorite",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Favorite", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Materials",
                 columns: table => new
@@ -26,11 +66,10 @@ namespace Proj.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Stakeholder",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR [UserSequence]"),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
@@ -38,7 +77,55 @@ namespace Proj.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Stakeholder", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CardClient",
+                columns: table => new
+                {
+                    CardId = table.Column<int>(type: "int", nullable: false),
+                    ClientsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CardClient", x => new { x.CardId, x.ClientsId });
+                    table.ForeignKey(
+                        name: "FK_CardClient_Card_CardId",
+                        column: x => x.CardId,
+                        principalTable: "Card",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CardClient_Client_ClientsId",
+                        column: x => x.ClientsId,
+                        principalTable: "Client",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClientFavorite",
+                columns: table => new
+                {
+                    ClientsId = table.Column<int>(type: "int", nullable: false),
+                    FavoritesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientFavorite", x => new { x.ClientsId, x.FavoritesId });
+                    table.ForeignKey(
+                        name: "FK_ClientFavorite_Client_ClientsId",
+                        column: x => x.ClientsId,
+                        principalTable: "Client",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClientFavorite_Favorite_FavoritesId",
+                        column: x => x.FavoritesId,
+                        principalTable: "Favorite",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,7 +145,8 @@ namespace Proj.Migrations
                     MadeIn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Warranty = table.Column<int>(type: "int", nullable: false),
                     IsFavo = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: true),
+                    StakeholderId = table.Column<int>(type: "int", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: true),
                     InStock = table.Column<bool>(type: "bit", nullable: false),
                     Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Review = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -68,28 +156,14 @@ namespace Proj.Migrations
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
+                        name: "FK_Products_Client_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Client",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Factories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Factories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Factories_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
+                        name: "FK_Products_Stakeholder_StakeholderId",
+                        column: x => x.StakeholderId,
+                        principalTable: "Stakeholder",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -137,21 +211,15 @@ namespace Proj.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Materials",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Wood" },
-                    { 2, "Glass" },
-                    { 3, "Fiber" }
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_CardClient_ClientsId",
+                table: "CardClient",
+                column: "ClientsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Factories_ProductId",
-                table: "Factories",
-                column: "ProductId",
-                unique: true);
+                name: "IX_ClientFavorite_FavoritesId",
+                table: "ClientFavorite",
+                column: "FavoritesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Image_ProductId",
@@ -164,16 +232,24 @@ namespace Proj.Migrations
                 column: "ProductsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_UserId",
+                name: "IX_Products_ClientId",
                 table: "Products",
-                column: "UserId");
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_StakeholderId",
+                table: "Products",
+                column: "StakeholderId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Factories");
+                name: "CardClient");
+
+            migrationBuilder.DropTable(
+                name: "ClientFavorite");
 
             migrationBuilder.DropTable(
                 name: "Image");
@@ -182,13 +258,25 @@ namespace Proj.Migrations
                 name: "MaterialProduct");
 
             migrationBuilder.DropTable(
+                name: "Card");
+
+            migrationBuilder.DropTable(
+                name: "Favorite");
+
+            migrationBuilder.DropTable(
                 name: "Materials");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Client");
+
+            migrationBuilder.DropTable(
+                name: "Stakeholder");
+
+            migrationBuilder.DropSequence(
+                name: "UserSequence");
         }
     }
 }

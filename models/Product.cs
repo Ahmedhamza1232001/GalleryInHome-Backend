@@ -23,8 +23,8 @@ namespace Proj.models
         public int Warranty { get; set; }
         public List<Material>? Materials { get; set; }
         public bool IsFavo { get; set; }
-        public User? User { get; set; }
-        public Factory? Factory { get; set; }
+        public required Stakeholder Stakeholder { get; set; }
+        public Client? Client { get; set; }
         public bool InStock { get; set; } = true;
         public string Model { get; set; } = string.Empty;
         public string Review { get; set; } = string.Empty;

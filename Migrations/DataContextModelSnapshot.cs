@@ -22,6 +22,38 @@ namespace Proj.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.HasSequence("UserSequence");
+
+            modelBuilder.Entity("CardClient", b =>
+                {
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CardId", "ClientsId");
+
+                    b.HasIndex("ClientsId");
+
+                    b.ToTable("CardClient");
+                });
+
+            modelBuilder.Entity("ClientFavorite", b =>
+                {
+                    b.Property<int>("ClientsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FavoritesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ClientsId", "FavoritesId");
+
+                    b.HasIndex("FavoritesId");
+
+                    b.ToTable("ClientFavorite");
+                });
+
             modelBuilder.Entity("MaterialProduct", b =>
                 {
                     b.Property<int>("MaterialsId")
@@ -37,7 +69,7 @@ namespace Proj.Migrations
                     b.ToTable("MaterialProduct");
                 });
 
-            modelBuilder.Entity("Proj.models.Factory", b =>
+            modelBuilder.Entity("Proj.Api.models.Card", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,19 +77,22 @@ namespace Proj.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("Id");
 
-                    b.Property<int>("ProductId")
+                    b.ToTable("Card");
+                });
+
+            modelBuilder.Entity("Proj.Api.models.Favorite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId")
-                        .IsUnique();
-
-                    b.ToTable("Factories");
+                    b.ToTable("Favorite");
                 });
 
             modelBuilder.Entity("Proj.models.Image", b =>
@@ -97,23 +132,6 @@ namespace Proj.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Materials");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Wood"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Glass"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Fiber"
-                        });
                 });
 
             modelBuilder.Entity("Proj.models.Product", b =>
@@ -123,6 +141,9 @@ namespace Proj.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Color")
                         .HasColumnType("int");
@@ -169,7 +190,7 @@ namespace Proj.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("StakeholderId")
                         .HasColumnType("int");
 
                     b.Property<int>("Warranty")
@@ -180,7 +201,9 @@ namespace Proj.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StakeholderId");
 
                     b.ToTable("Products");
                 });
@@ -189,9 +212,10 @@ namespace Proj.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("NEXT VALUE FOR [UserSequence]");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseSequence(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -211,7 +235,53 @@ namespace Proj.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable((string)null);
+
+                    b.UseTpcMappingStrategy();
+                });
+
+            modelBuilder.Entity("Proj.Client", b =>
+                {
+                    b.HasBaseType("Proj.models.User");
+
+                    b.ToTable("Client");
+                });
+
+            modelBuilder.Entity("Proj.Stakeholder", b =>
+                {
+                    b.HasBaseType("Proj.models.User");
+
+                    b.ToTable("Stakeholder");
+                });
+
+            modelBuilder.Entity("CardClient", b =>
+                {
+                    b.HasOne("Proj.Api.models.Card", null)
+                        .WithMany()
+                        .HasForeignKey("CardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Proj.Client", null)
+                        .WithMany()
+                        .HasForeignKey("ClientsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ClientFavorite", b =>
+                {
+                    b.HasOne("Proj.Client", null)
+                        .WithMany()
+                        .HasForeignKey("ClientsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Proj.Api.models.Favorite", null)
+                        .WithMany()
+                        .HasForeignKey("FavoritesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MaterialProduct", b =>
@@ -229,17 +299,6 @@ namespace Proj.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Proj.models.Factory", b =>
-                {
-                    b.HasOne("Proj.models.Product", "Product")
-                        .WithOne("Factory")
-                        .HasForeignKey("Proj.models.Factory", "ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Proj.models.Image", b =>
                 {
                     b.HasOne("Proj.models.Product", null)
@@ -249,21 +308,32 @@ namespace Proj.Migrations
 
             modelBuilder.Entity("Proj.models.Product", b =>
                 {
-                    b.HasOne("Proj.models.User", "User")
+                    b.HasOne("Proj.Client", "Client")
                         .WithMany("Products")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("ClientId");
 
-                    b.Navigation("User");
+                    b.HasOne("Proj.Stakeholder", "Stakeholder")
+                        .WithMany("Products")
+                        .HasForeignKey("StakeholderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Stakeholder");
                 });
 
             modelBuilder.Entity("Proj.models.Product", b =>
                 {
-                    b.Navigation("Factory");
-
                     b.Navigation("Images");
                 });
 
-            modelBuilder.Entity("Proj.models.User", b =>
+            modelBuilder.Entity("Proj.Client", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Proj.Stakeholder", b =>
                 {
                     b.Navigation("Products");
                 });

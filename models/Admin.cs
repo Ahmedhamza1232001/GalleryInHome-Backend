@@ -1,5 +1,5 @@
 ﻿namespace Proj;
-public class Client
+public class Admin:User
 {
 
 }

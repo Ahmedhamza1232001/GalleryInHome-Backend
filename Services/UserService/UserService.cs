@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Proj.Dtos.Product
+namespace Proj.Api.Services.UserService
 {
-    public class ClientAddProductDto
+    public class UserService:IUserService
     {
 
     }

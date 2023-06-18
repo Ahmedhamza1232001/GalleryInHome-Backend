@@ -13,16 +13,19 @@ namespace Proj.Controllers
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {
+        #region DependencyInjection
         private readonly IAuthRepository _authRepo;
         public AuthController(IAuthRepository authRepo)
         {
             _authRepo = authRepo;
         }
+        #endregion
+
         [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
         {
             var response = await _authRepo.Register(
-                new User
+                new Client
                 {
                     UserName = request.UserName,
 
