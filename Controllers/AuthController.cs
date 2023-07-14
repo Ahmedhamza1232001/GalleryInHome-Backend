@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Proj.Data;
 using Proj.Dtos.User;
+using Microsoft.Identity.Client;
 
 namespace Proj.Controllers
 {
@@ -20,6 +21,7 @@ namespace Proj.Controllers
             _authRepo = authRepo;
         }
         #endregion
+
 
         [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)

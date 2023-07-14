@@ -1,5 +1,6 @@
 global using Proj.models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -14,6 +15,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddControllers();
+
+//Add Identity service
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<DataContext>();
 
 
 
@@ -48,7 +53,7 @@ var configuration = provider.GetRequiredService<IConfiguration>();
 //     });
 // });
 
-builder.Services.AddAutoMapper(typeof(Program).Assembly); 
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 //to make webApi know which implementaion use for IproductService
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
